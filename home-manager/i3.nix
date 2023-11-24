@@ -64,16 +64,16 @@
           always = true;
           notification = false;
         }
-	{
-	  command = "betterlockscreen -w";
-	  always = true;
+        {
+          command = "betterlockscreen -w";
+          always = true;
           notification = false;
-	}
-	{
-	  command = "greenclip daemon > /dev/null";
-	  always = true;
+        }
+        {
+          command = "greenclip daemon > /dev/null";
+          always = true;
           notification = false;
-	}
+        }
       ];
 
       keybindings = lib.mkOptionDefault {
@@ -94,11 +94,13 @@
         "${modifier}+Shift+k" = "move down";
         "${modifier}+Shift+l" = "move up";
         "${modifier}+Shift+semicolon" = "move right";
-        
-        "${modifier}+d" = "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
 
-        "${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";	
-	"${modifier}+c" = ''exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
+        "${modifier}+d" =
+          "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
+
+        "${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";
+        "${modifier}+c" = ''
+          exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
       };
 
       bars = [ ]; # Disable i3bar for polybar use

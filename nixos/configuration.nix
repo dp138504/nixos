@@ -5,10 +5,9 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
 {
-  imports =
-    [ 
-      ./hardware-configuration.nix # Include the results of the hardware scan. 
-    ];
+  imports = [
+    ./hardware-configuration.nix # Include the results of the hardware scan.
+  ];
 
   nixpkgs = {
     config.allowUnfree = true;
@@ -21,12 +20,13 @@
   nix = {
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: {flake = value;}) inputs;
- 
+    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
+
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
- 
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
+      config.nix.registry;
+
     settings = {
       # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
@@ -62,26 +62,40 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+
   # Enable and configure the X11 windowing system.
   services.xserver = {
     enable = true;
 
-    displayManager.lightdm.enable = true;
-    displayManager.defaultSession = "none+i3";
+    displayManager = {
+      defaultSession = "none+i3";
+      lightdm = {
+        enable = true;
+        greeters.slick = {
+          enable = true;
+          theme = {
+            name = "Gruvbox-Dark-BL";
+            package = pkgs.gruvbox-gtk-theme; };
+          iconTheme = {
+            name = "Gruvbox-Plus-Dark";
+            package = pkgs.gruvbox-plus-icons-pack; };
+          cursorTheme = {
+            name = "Adwaita";
+            package = pkgs.gnome.adwaita-icon-theme; };
+        };
+      };
+    };
 
     desktopManager = {
       xterm.enable = false;
-      budgie = {
-        enable = true;
-      };
+      budgie = { enable = true; };
     };
-    
+
     windowManager.i3 = {
       enable = true;
       package = pkgs.i3-gaps;
-      extraPackages = with pkgs; [
-	i3lock-color
-      ];
+      extraPackages = with pkgs; [ i3lock-color ];
     };
   };
 
@@ -108,7 +122,7 @@
   };
 
   # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dap = {
@@ -116,43 +130,42 @@
     description = "Dylan A Pitts";
     extraGroups = [ "networkmanager" "wheel" "video" ];
     shell = pkgs.zsh;
-    packages = with pkgs; [
-      home-manager
-    ];
+    packages = with pkgs; [ home-manager ];
   };
-
 
   # $ nix search nixpkgs#wget
   environment.systemPackages = with pkgs; [
-    firefox  # Default system browser
-    vim      # Text editor
-    fprintd  # Fingerprint reader daemon
+    firefox # Default system browser
+    vim # Text editor
+    fprintd # Fingerprint reader daemon
     powertop # Power management monitor
-    git 
-    gruvbox-plus-icons-pack
+    git
+    gruvbox-plus-icons-pack # Gruvbox Icons
+    gnome.seahorse # Gnome keyring management
   ];
 
   # Power management
   powerManagement.powertop.enable = true;
   services.tlp = {
     enable = true;
-    settings = {
-      PCIE_ASPM_ON_BAT = "powersupersave"; 
-    };
+    settings = { PCIE_ASPM_ON_BAT = "powersupersave"; };
   };
 
   systemd.targets.hybrid-sleep.enable = true;
+  services.logind.lidSwitch = "suspend-then-hibernate";
+  services.logind.lidSwitchExternalPower = "suspend";
   services.logind.extraConfig = ''
     IdleAction=hybrid-sleep
     IdleActionSec=1800s
   '';
+  systemd.sleep.extraConfig = ''
+    HibernateMode=shutdown
+    HibernateDelaySec=1800s
+  '';
 
   programs.zsh.enable = true;
 
-
-  programs.steam = {
-    enable = true;
-  };
+  programs.steam = { enable = true; };
   hardware.opengl.driSupport32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are

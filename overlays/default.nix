@@ -9,8 +9,8 @@
   modifications = final: prev: {
     polybar = prev.polybar.overrideAttrs (old: {
       src = prev.fetchFromGitHub {
-        rev = "v3.7.0";
-	hash = "sha256-ccFAHyhDuOVuMjytqQCaRiecRwgdDJbNSuszAKfCMnE=";
+        rev = "3.7.0";
+	hash = "sha256-Z1rL9WvEZHr5M03s9KCJ6O6rNuaK7PpwUDaatYuCocI=";
 	owner = "polybar";
 	repo = "polybar";
 	fetchSubmodules = true;

@@ -15,6 +15,9 @@
 
     # NixColors
     nix-colors.url = "github:misterio77/nix-colors";
+
+    # Neovim configuration
+    kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
   };
 
   outputs = {
@@ -23,6 +26,7 @@
     home-manager,
     hardware,
     nix-colors,
+    kickstart-nix-nvim,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -39,9 +43,9 @@
       fw13-nixos = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
-	  ./nixos/configuration.nix
-	  hardware.nixosModules.framework-13th-gen-intel
-	];
+	      ./nixos/configuration.nix
+	      hardware.nixosModules.framework-13th-gen-intel
+	    ];
       };
     };
 
@@ -51,7 +55,9 @@
       "dap@fw13-nixos" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs nix-colors;};
-        modules = [./home-manager/home.nix];
+        modules = [
+	      ./home-manager/home.nix
+	    ];
       };
     };
   };

@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ config, pkgs, lib, ... }:
 
 {
   services.polybar.enable = true;
@@ -22,7 +22,8 @@
       radius = 0;
       enable-ipc = true;
       modules-left = "i3 xwindow";
-      modules-right = "cpu memory lan wlan battery alsa backlight tray powermenu";
+      modules-right =
+        "cpu memory lan wlan battery alsa backlight tray powermenu";
       modules-center = "date";
       font-0 = ''"JetBrainsMono NF;2"'';
       font-1 = ''"Noto Color Emoji:scale=10; 2"'';
@@ -94,13 +95,13 @@
       low-at = 15;
       battery = "BAT1";
       adapter = "ACAD";
-      ramp.capacity = [ "" "" "" "" "" ]; 
+      ramp.capacity = [ "" "" "" "" "" ];
       animation.charging = [ "" "" "" "" "" ];
       animation-charging-framerate = 750;
-      format = { 
+      format = {
         discharging = "<ramp-capacity>  <label-discharging>";
         charging = "<animation-charging> <label-charging>";
-        low = "<animation-low> <label-low>"; 
+        low = "<animation-low> <label-low>";
         full = "<ramp-capacity>  100%";
       };
       label = {
@@ -142,11 +143,11 @@
     };
     "module/powermenu" = {
       type = "custom/menu";
-      
+
       expand-right = true;
-      
+
       format-spacing = 1;
-      
+
       label-open = "";
       label-open-foreground = "#${config.colorScheme.colors.base06}";
       label-close = "";
@@ -154,19 +155,19 @@
       label-close-foreground = "#${config.colorScheme.colors.base06}";
       label-separator = "|";
       label-separator-foreground = "#${config.colorScheme.colors.base03}";
-      
+
       menu-0-0 = "Reboot";
       menu-0-0-exec = "#powermenu.open.1";
       menu-0-0-foreground = "#${config.colorScheme.colors.base08}";
-      
+
       menu-0-1 = "Power Off";
       menu-0-1-exec = "#powermenu.open.2";
       menu-0-1-foreground = "#${config.colorScheme.colors.base08}";
-      
+
       menu-0-2 = "Hibernate";
       menu-0-2-exec = "#powermenu.open.3";
       menu-0-2-foreground = "#${config.colorScheme.colors.base08}";
-     
+
       menu-0-3 = "Log Out";
       menu-0-3-exec = "#powermenu.open.4";
       menu-0-3-foreground = "#${config.colorScheme.colors.base0A}";
@@ -178,7 +179,7 @@
       menu-1-1 = "Reboot";
       menu-1-1-exec = "${pkgs.systemd}/bin/systemctl reboot";
       menu-1-1-foreground = "#${config.colorScheme.colors.base08}";
-      
+
       menu-2-0 = "󰌍";
       menu-2-0-padding-right = "5pt";
       menu-2-0-exec = "#powermenu.open.0";
@@ -186,7 +187,7 @@
       menu-2-1 = "Power Off";
       menu-2-1-exec = "${pkgs.systemd}/bin/systemctl poweroff";
       menu-2-1-foreground = "#${config.colorScheme.colors.base08}";
-      
+
       menu-3-0 = "󰌍";
       menu-3-0-padding-right = "5pt";
       menu-3-0-exec = "#powermenu.open.0";
@@ -194,7 +195,7 @@
       menu-3-1 = "Hibernate";
       menu-3-1-exec = "${pkgs.systemd}/bin/systemctl hibernate";
       menu-3-1-foreground = "#${config.colorScheme.colors.base08}";
-      
+
       menu-4-0 = "󰌍";
       menu-4-0-padding-right = "5pt";
       menu-4-0-exec = "#powermenu.open.0";

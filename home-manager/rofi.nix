@@ -39,7 +39,7 @@ in {
         expand = false;
         filename = "search";
         size = mkLiteral "28px";
-      }; 
+      };
       "entry" = {
         font = mkLiteral "inherit";
         placeholder = "Search...";
@@ -48,42 +48,26 @@ in {
       "icon-search, prompt, entry, element-text, element-icon" = {
         vertical-align = mkLiteral "0.5";
       };
-      "prompt" = {
-        text-color = mkLiteral "@accent-color";
-      };
+      "prompt" = { text-color = mkLiteral "@accent-color"; };
       "listview" = {
         lines = 8;
         columns = 1;
-        fixed-height = false; 
+        fixed-height = false;
       };
       "element" = {
         padding = mkLiteral "8px";
         spacing = mkLiteral "8px";
       };
-      "element normal urgent" = {
-        text-color = mkLiteral "@urgent";
-      };
-      "element normal active" = {
-        text-color = mkLiteral "@accent-color";
-      };
-      "element selected" = {
-        text-color = mkLiteral "@bg";
-      };
+      "element normal urgent" = { text-color = mkLiteral "@urgent"; };
+      "element normal active" = { text-color = mkLiteral "@accent-color"; };
+      "element selected" = { text-color = mkLiteral "@bg"; };
       "element selected normal" = {
         background-color = mkLiteral "@accent-color";
       };
-      "element selected urgent" = {
-        background-color = mkLiteral "@urgent";
-      };
-      "element selected active" = {
-        background-color = mkLiteral "@accent";
-      };
-      "element-icon" = {
-        size = mkLiteral "0.75em";
-      };
-      "element-text" = {
-        text-color = mkLiteral "inherit";
-      };
+      "element selected urgent" = { background-color = mkLiteral "@urgent"; };
+      "element selected active" = { background-color = mkLiteral "@accent"; };
+      "element-icon" = { size = mkLiteral "0.75em"; };
+      "element-text" = { text-color = mkLiteral "inherit"; };
     };
   };
 }

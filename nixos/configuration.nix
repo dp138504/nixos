@@ -38,6 +38,7 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ];
   boot.plymouth.enable = true;
 
   networking.hostName = "fw13-nixos"; # Define your hostname.
@@ -67,9 +68,17 @@
   # Enable and configure the X11 windowing system.
   services.xserver = {
     enable = true;
+    exportConfiguration = true;
+    videoDrivers = [ "nvidia" ];
+    # Set keyboard layout
+    layout = "us";
+    xkbVariant = "";
+    # Enable touchpad support (enabled default in most desktopManager).
+    libinput.enable = true;
+
 
     displayManager = {
-      defaultSession = "none+i3";
+      defaultSession = "xfce+i3";
       lightdm = {
         enable = true;
         greeters.slick = {
@@ -90,6 +99,11 @@
     desktopManager = {
       xterm.enable = false;
       budgie = { enable = true; };
+      xfce = { 
+        enable = true; 
+        noDesktop = true;
+        enableXfwm = false; 
+      };
     };
 
     windowManager.i3 = {
@@ -100,12 +114,7 @@
   };
 
   services.fwupd.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "";
-  };
+  services.hardware.bolt.enable = true; # Thunderbolt daemon
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -120,9 +129,6 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver.libinput.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.dap = {
@@ -165,8 +171,38 @@
 
   programs.zsh.enable = true;
 
-  programs.steam = { enable = true; };
-  hardware.opengl.driSupport32Bit = true;
+  hardware.opengl = {
+    enable = true;
+    driSupport = true;
+    driSupport32Bit = true;
+  };
+
+  # See the following for details 
+  # https://nixos.wiki/wiki/Nvidia
+  hardware.nvidia = {
+    modesetting.enable = true;
+    powerManagement.enable = false;
+    powerManagement.finegrained = false;
+    open = true; # Not working with false
+    nvidiaSettings = true;
+    forceFullCompositionPipeline = true;
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+
+    prime = {
+      sync.enable = true;
+      allowExternalGpu = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:4:0:0";
+    };
+  };
+
+  specialisation = {
+    on-the-go.configuration = {
+      system.nixos.tags = [ "on-the-go" ];
+      services.xserver.videoDrivers = lib.mkForce [ "i915" ];
+      hardware.nvidia.prime.sync.enable = lib.mkForce false;
+    };
+  };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -189,6 +225,6 @@
 
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.05"; # Did you read the comment?
+  system.stateVersion = "23.11"; # Did you read the comment?
 
 }

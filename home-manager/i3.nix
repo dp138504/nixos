@@ -74,6 +74,11 @@
           always = true;
           notification = false;
         }
+        {
+          command = "${pkgs.autorandr}/bin/autorandr -c";
+          always = true;
+          notification = false;
+        }
       ];
 
       keybindings = lib.mkOptionDefault {

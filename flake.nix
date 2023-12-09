@@ -18,6 +18,7 @@
 
     # Neovim configuration
     kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
+    #kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
   };
 
   outputs = {

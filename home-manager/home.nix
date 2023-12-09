@@ -15,6 +15,7 @@
     ./kitty.nix
     #./wezterm.nix
     ./modules/services/dunst.nix
+    ./autorandr.nix
   ];
 
   disabledModules = [

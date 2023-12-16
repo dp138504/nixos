@@ -38,7 +38,9 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "usbcore.autosuspend=-1" ];
+  boot.kernelParams = [ 
+      "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
+    ];
   boot.plymouth.enable = true;
 
   networking.hostName = "fw13-nixos"; # Define your hostname.
@@ -63,7 +65,8 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  security.pam.services.lightdm.enableGnomeKeyring = true;
+  #security.pam.services.lightdm.enableGnomeKeyring = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
 
   # Enable and configure the X11 windowing system.
   services.xserver = {
@@ -72,33 +75,45 @@
     videoDrivers = [ "nvidia" ];
     # Set keyboard layout
     layout = "us";
-    xkbVariant = "";
+    xkb.variant = "";
     # Enable touchpad support (enabled default in most desktopManager).
     libinput.enable = true;
 
 
     displayManager = {
-      defaultSession = "none+i3";
-      lightdm = {
-        enable = true;
-        greeters.slick = {
-          enable = true;
-          theme = {
-            name = "Gruvbox-Dark-BL";
-            package = pkgs.gruvbox-gtk-theme; };
-          iconTheme = {
-            name = "Gruvbox-Plus-Dark";
-            package = pkgs.gruvbox-plus-icons-pack; };
-          cursorTheme = {
-            name = "Adwaita";
-            package = pkgs.gnome.adwaita-icon-theme; };
+      defaultSession = "xfce+i3";
+      sddm.settings = {
+        X11 = {
+          DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
         };
       };
+      sddm.sugarCandyNix = {
+        enable = true;
+        settings = {
+          Background = lib.cleanSource ./assets/background_2256x1504.jpg;
+          ScreenWidth = 2256;
+          ScreenHeight = 1504;
+          FormPosition = "left";
+          HaveFormBackground = true;
+          PartialBlur = true;
+          ForceHideCompletePassword = true; # Do not show any password characters
+          HeaderText = "";
+        };
+      };
+     # setupCommands = lib.mkAfter ''
+     #   ${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)
+     # '';
     };
 
     desktopManager = {
       xterm.enable = false;
-      budgie = { enable = true; };
+      budgie = { enable = true; }; # Default Desktop Environment
+      xfce = {
+        enable = true;
+        noDesktop = true; 
+        enableXfwm = false;
+        enableScreensaver = true;
+      };
     };
 
     windowManager.i3 = {
@@ -108,62 +123,10 @@
     };
   };
   
-#  services.autorandr = {
-#    enable = true;
-#    profiles = {
-#      "docked" = {
-#        fingerprint = {
-#          DP-2 = "00ffffffffffff0006b3b127d7c801002f1b0104a53c227806ee91a3544c99260f505421080001010101010101010101010101010101565e00a0a0a029503020350056502100001a000000ff002341534f382b2f7a735a724c64000000fd001e9022de3b010a202020202020000000fc00524f4720504732373851520a20016a020312412309070183010000654b040001015a8700a0a0a03b503020350056502100001a5aa000a0a0a046503020350056502100001a6fc200a0a0a055503020350056502100001a22e50050a0a0675008203a0056502100001e1c2500a0a0a011503020350056502100001a0000000000000000000000000000000000000019";
-#          DP-4 = "00ffffffffffff001e6d0777c09704000c200104b53c22789f3e31ae5047ac270c50542108007140818081c0a9c0d1c08100010101014dd000a0f0703e803020650c58542100001a286800a0f0703e800890650c58542100001a000000fd00283d878738010a202020202020000000fc004c472048445220344b0a20202001aa02031c7144900403012309070783010000e305c000e6060501605550023a801871382d40582c450058542100001e565e00a0a0a029503020350058542100001a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e";
-#          eDP-1-1 = "00ffffffffffff0009e5ca0b000000002f200104a51c137803de50a3544c99260f505400000001010101010101010101010101010101115cd01881e02d50302036001dbe1000001aa749d01881e02d50302036001dbe1000001a000000fe00424f452043510a202020202020000000fe004e4531333546424d2d4e34310a0073";
-#        };
-#        config = {
-#          eDP-1-1.enable = false;
-#          DP-2 = {
-#            enable = true;
-#            crtc = 0;
-#            primary = true;
-#            position = "3840x360";
-#            mode = "2560x1440";
-#            rate = "144.00";
-#          };
-#          DP-4 = {
-#            enable = true;
-#            crtc = 1;
-#            position = "0x0";
-#            mode = "3840x2160";
-#            rate = "60.00";
-#          };
-#        };
-#      };
-#      "undocked" = {
-#        fingerprint = {
-#          DP-2 = "00ffffffffffff0006b3b127d7c801002f1b0104a53c227806ee91a3544c99260f505421080001010101010101010101010101010101565e00a0a0a029503020350056502100001a000000ff002341534f382b2f7a735a724c64000000fd001e9022de3b010a202020202020000000fc00524f4720504732373851520a20016a020312412309070183010000654b040001015a8700a0a0a03b503020350056502100001a5aa000a0a0a046503020350056502100001a6fc200a0a0a055503020350056502100001a22e50050a0a0675008203a0056502100001e1c2500a0a0a011503020350056502100001a0000000000000000000000000000000000000019";
-#          DP-4 = "00ffffffffffff001e6d0777c09704000c200104b53c22789f3e31ae5047ac270c50542108007140818081c0a9c0d1c08100010101014dd000a0f0703e803020650c58542100001a286800a0f0703e800890650c58542100001a000000fd00283d878738010a202020202020000000fc004c472048445220344b0a20202001aa02031c7144900403012309070783010000e305c000e6060501605550023a801871382d40582c450058542100001e565e00a0a0a029503020350058542100001a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001e";
-#          eDP-1 = "00ffffffffffff0009e5ca0b000000002f200104a51c137803de50a3544c99260f505400000001010101010101010101010101010101115cd01881e02d50302036001dbe1000001aa749d01881e02d50302036001dbe1000001a000000fe00424f452043510a202020202020000000fe004e4531333546424d2d4e34310a0073";
-#      };
-#      config = {
-#        DP-2.enable = false;
-#        DP-4.enable = false;
-#        eDP-1 = {
-#          enable = true;
-#          crtc = 0;
-#          primary = true;
-#          position = "0x0";
-#          mode = "2256x1504";
-#          rate = "60.00";
-#        };
-#      };
-#    };
-#  };
-#  defaultTarget = "undocked";
-#};
-
-  services.fwupd.enable = true;
+  services.fwupd.enable = true; # Firmware updates
   services.hardware.bolt.enable = true; # Thunderbolt daemon
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.fprintd.enable = false; # Disable fingerprint reader (Overridden in specialisation)
+  services.printing.enable = true; # Enable CUPS to print documents.
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -191,31 +154,28 @@
     vim # Text editor
     fprintd # Fingerprint reader daemon
     powertop # Power management monitor
-    git
-    gruvbox-plus-icons-pack # Gruvbox Icons
+    git # SCM 
+    gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
     gnome.seahorse # Gnome keyring management
   ];
 
   # Power management
-  powerManagement.powertop.enable = true;
-  services.tlp = {
+  powerManagement.powertop.enable = true; # View power usage
+  services.tlp = { # Laptop power saving utility
     enable = true;
-    settings = { PCIE_ASPM_ON_BAT = "powersupersave"; };
+    settings = { 
+      PCIE_ASPM_ON_BAT = "powersupersave";
+      PCIE_ASPM_ON_AC = "on"; # Force PCIe (i.e. eGPU) devices to "on" when on external power
+      };
   };
 
-  systemd.targets.hybrid-sleep.enable = true;
-  services.logind.lidSwitch = "suspend-then-hibernate";
-  services.logind.lidSwitchExternalPower = "suspend";
-  services.logind.extraConfig = ''
-    IdleAction=hybrid-sleep
-    IdleActionSec=1800s
-  '';
-  systemd.sleep.extraConfig = ''
-    HibernateMode=shutdown
-    HibernateDelaySec=1800s
-  '';
+#  services.logind = {
+#    lidSwitch = "ignore";
+#    lidSwitchExternalPower = "ignore";
+#  };
 
   programs.zsh.enable = true;
+  programs.xfconf.enable = true;
 
   hardware.opengl = {
     enable = true;
@@ -223,15 +183,14 @@
     driSupport32Bit = true;
   };
 
-  # See the following for details 
-  # https://nixos.wiki/wiki/Nvidia
+  # See the following for details: https://nixos.wiki/wiki/Nvidia
   hardware.nvidia = {
     modesetting.enable = true;
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
-    open = true; # Not working with false
-    nvidiaSettings = true;
-    forceFullCompositionPipeline = true;
+    powerManagement.enable = false; # Must be false for sync
+    powerManagement.finegrained = false; # Must be false for sync
+    open = true; # Not working with false (Getting RmInitAdapter failed which could be a bios bug)
+    nvidiaSettings = true; # Nvidia Xorg Settings tool
+    forceFullCompositionPipeline = true; # Helps with screen tearing
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     prime = {
@@ -243,10 +202,22 @@
   };
 
   specialisation = {
-    on-the-go.configuration = {
-      system.nixos.tags = [ "on-the-go" ];
+    undocked.configuration = {
+      system.nixos.tags = [ "undocked" ];
       services.xserver.videoDrivers = lib.mkForce [ "i915" ];
+      services.fprintd.enable = lib.mkForce true;
       hardware.nvidia.prime.sync.enable = lib.mkForce false;
+      systemd.targets.hybrid-sleep.enable = lib.mkForce true;
+      services.logind.lidSwitch = lib.mkForce "suspend-then-hibernate";
+      services.logind.lidSwitchExternalPower = lib.mkForce "suspend";
+      services.logind.extraConfig = lib.mkForce ''
+        IdleAction=hybrid-sleep
+        IdleActionSec=1800s
+      '';
+      systemd.sleep.extraConfig = lib.mkForce ''
+        HibernateMode=shutdown
+        HibernateDelaySec=1800s
+      '';
     };
   };
 
@@ -261,7 +232,7 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  # services.openssh.enable = true;
+  #services.openssh.enable = false;
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];

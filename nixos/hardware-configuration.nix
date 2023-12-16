@@ -7,11 +7,12 @@
   imports =
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
-
-  boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "uas" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-snapshot" ];
-  boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+  
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.initrd.availableKernelModules = with config.boot.kernelPackages; [ "xhci_pci" "thunderbolt" "nvme" "usb_storage" "uas" "sd_mod" ];
+  boot.initrd.kernelModules = with config.boot.kernelPackages; [ "dm-snapshot" ];
+  boot.kernelModules = with config.boot.kernelPackages; [ "kvm-intel" ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ ]; 
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/72f6c0f8-d526-4aea-afdf-f683d3005933";

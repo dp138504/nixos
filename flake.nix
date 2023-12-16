@@ -19,6 +19,12 @@
     # Neovim configuration
     kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
     #kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
+
+    sddm-surgar-candy-nix = {
+      url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs = {
@@ -28,6 +34,7 @@
     hardware,
     nix-colors,
     kickstart-nix-nvim,
+    sddm-surgar-candy-nix,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -47,6 +54,7 @@
 	      ./nixos/configuration.nix
 	      hardware.nixosModules.framework-13th-gen-intel
         hardware.nixosModules.common-gpu-nvidia-nonprime
+        sddm-surgar-candy-nix.nixosModules.default
 	    ];
       };
     };

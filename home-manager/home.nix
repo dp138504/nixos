@@ -108,10 +108,22 @@
   };
 
   services.betterlockscreen = {
-    enable = true;
+    enable = false;
     package = pkgs.unstable.betterlockscreen;
     inactiveInterval = 5;
     arguments = [ "dimblur --off 120" ];
+  };
+
+  services.screen-locker = {
+    enable = false;
+    xautolock.enable = false;
+  };
+
+  services.xidlehook = {
+    enable = false;
+    detect-sleep = true;
+    not-when-audio = true;
+    not-when-fullscreen = true;
   };
 
   services.picom = {

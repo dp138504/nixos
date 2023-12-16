@@ -201,7 +201,8 @@
       menu-4-0-exec = "#powermenu.open.0";
       menu-4-0-foreground = "#${config.colorScheme.colors.base06}";
       menu-4-1 = "Log Out";
-      menu-4-1-exec = "${pkgs.i3}/bin/i3-msg exit";
+      #menu-4-1-exec = "${pkgs.i3}/bin/i3-msg exit";
+      menu-4-1-exec = "${pkgs.xfce.xfce4-session}/bin/xfce4-session-logout --logout";
       menu-4-1-foreground = "#${config.colorScheme.colors.base0A}";
     };
   };

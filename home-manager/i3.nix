@@ -64,11 +64,11 @@
           always = true;
           notification = false;
         }
-        {
-          command = "betterlockscreen -w";
-          always = true;
-          notification = false;
-        }
+#        {
+#          command = "betterlockscreen -w";
+#          always = true;
+#          notification = false;
+#        }
         {
           command = "greenclip daemon > /dev/null";
           always = true;
@@ -79,6 +79,22 @@
           always = true;
           notification = false;
         }
+        #{
+        #  command = "${pkgs.xfce.xfce4-settings}/libexec/xfce4-settings";
+        #  always = true;
+        #  notification = false;
+        #}
+        {
+          command = "${pkgs.xfce.xfce4-screensaver}/bin/xfce4-screensaver";
+          always = true;
+          notification = false;
+        }
+        {
+          command = "${pkgs.xfce.xfce4-power-manager}/bin/xfce4-power-manager";
+          always = true;
+          notification = false;
+        }
+
       ];
 
       keybindings = lib.mkOptionDefault {
@@ -103,7 +119,8 @@
         "${modifier}+d" =
           "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
 
-        "${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";
+        #"${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";
+        "${modifier}+l" = "exec xflock4";
         "${modifier}+c" = ''
           exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
       };

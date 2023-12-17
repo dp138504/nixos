@@ -85,6 +85,11 @@
         #  notification = false;
         #}
         {
+          command = "sleep 3; ${pkgs.feh}/bin/feh --bg-scale /etc/nixos/nixos/assets/background_2256x1504.jpg --no-fehbg";
+          always = true;
+          notification = false;
+        }
+        {
           command = "${pkgs.xfce.xfce4-screensaver}/bin/xfce4-screensaver";
           always = true;
           notification = false;

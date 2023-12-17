@@ -65,6 +65,10 @@
       label-separator = "|";
       label-separator-padding = 0;
       label-separator-foreground = "#${config.colorScheme.colors.base03}";
+      label-visible = "%index%";
+      label-visible-padding = 1;
+      label-visible-background = "#${config.colorScheme.colors.base00}";
+      label-visible-underline = "#${config.colorScheme.colors.base02}";
     };
     "module/date" = {
       type = "internal/date";

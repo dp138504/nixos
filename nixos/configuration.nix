@@ -41,7 +41,13 @@
   boot.kernelParams = [ 
       "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
     ];
-  boot.plymouth.enable = true;
+  boot.plymouth = {
+    enable = true; # Graphical boot
+    themePackages = [ 
+      (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "angular" "angular_alt" "connect" "deus_ex" "green_blocks" "hexagon_dots_alt"]; })
+    ];
+    theme = "hexagon_dots_alt";
+  };
 
   networking.hostName = "fw13-nixos"; # Define your hostname.
 
@@ -96,8 +102,10 @@
           FormPosition = "left";
           HaveFormBackground = true;
           PartialBlur = true;
+          DateFormat = "dddd, MMMM d, yyyy";
           ForceHideCompletePassword = true; # Do not show any password characters
           HeaderText = "";
+          Font = "JetBrainsMono Nerd Font Mono";
         };
       };
      # setupCommands = lib.mkAfter ''

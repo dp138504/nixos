@@ -15,8 +15,8 @@
       pseudo-transparency = true;
     };
     "bar/top" = {
-      background = "#${config.colorScheme.colors.base00}";
-      foreground = "#${config.colorScheme.colors.base06}";
+      background = "#${config.colorScheme.palette.base00}";
+      foreground = "#${config.colorScheme.palette.base06}";
       width = "100%";
       height = "24pt";
       radius = 0;
@@ -29,7 +29,7 @@
       font-1 = ''"Noto Color Emoji:scale=10; 2"'';
       line-size = "3pt";
       border-size = "4pt";
-      border-color = "#${config.colorScheme.colors.base00}";
+      border-color = "#${config.colorScheme.palette.base00}";
       padding-left = 0;
       padding-right = 1;
       module-margin = 1;
@@ -49,26 +49,26 @@
       show-urgent = true;
       label-mode = "%mode%";
       label-mode-padding = 1;
-      label-mode-background = "#${config.colorScheme.colors.base08}";
+      label-mode-background = "#${config.colorScheme.palette.base08}";
       label-focused = "%index%";
-      label-focused-background = "#${config.colorScheme.colors.base00}";
-      label-focused-underline = "#${config.colorScheme.colors.base0B}";
+      label-focused-background = "#${config.colorScheme.palette.base00}";
+      label-focused-underline = "#${config.colorScheme.palette.base0B}";
       label-focused-padding = 1;
       label-unfocused = "%index%";
       label-unfocused-padding = 1;
       label-urgent = "%index%";
-      label-urgent-background = "#${config.colorScheme.colors.base08}";
+      label-urgent-background = "#${config.colorScheme.palette.base08}";
       label-urgent-padding = 1;
       label-empty = "%index%";
-      label-empty-foreground = "#${config.colorScheme.colors.base02}";
+      label-empty-foreground = "#${config.colorScheme.palette.base02}";
       label-empty-padding = 1;
       label-separator = "|";
       label-separator-padding = 0;
-      label-separator-foreground = "#${config.colorScheme.colors.base03}";
+      label-separator-foreground = "#${config.colorScheme.palette.base03}";
       label-visible = "%index%";
       label-visible-padding = 1;
-      label-visible-background = "#${config.colorScheme.colors.base00}";
-      label-visible-underline = "#${config.colorScheme.colors.base02}";
+      label-visible-background = "#${config.colorScheme.palette.base00}";
+      label-visible-underline = "#${config.colorScheme.palette.base02}";
     };
     "module/date" = {
       type = "internal/date";
@@ -153,61 +153,61 @@
       format-spacing = 1;
 
       label-open = "";
-      label-open-foreground = "#${config.colorScheme.colors.base06}";
+      label-open-foreground = "#${config.colorScheme.palette.base06}";
       label-close = "";
       label-close-padding-right = "5pt";
-      label-close-foreground = "#${config.colorScheme.colors.base06}";
+      label-close-foreground = "#${config.colorScheme.palette.base06}";
       label-separator = "|";
-      label-separator-foreground = "#${config.colorScheme.colors.base03}";
+      label-separator-foreground = "#${config.colorScheme.palette.base03}";
 
       menu-0-0 = "Reboot";
       menu-0-0-exec = "#powermenu.open.1";
-      menu-0-0-foreground = "#${config.colorScheme.colors.base08}";
+      menu-0-0-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-0-1 = "Power Off";
       menu-0-1-exec = "#powermenu.open.2";
-      menu-0-1-foreground = "#${config.colorScheme.colors.base08}";
+      menu-0-1-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-0-2 = "Hibernate";
       menu-0-2-exec = "#powermenu.open.3";
-      menu-0-2-foreground = "#${config.colorScheme.colors.base08}";
+      menu-0-2-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-0-3 = "Log Out";
       menu-0-3-exec = "#powermenu.open.4";
-      menu-0-3-foreground = "#${config.colorScheme.colors.base0A}";
+      menu-0-3-foreground = "#${config.colorScheme.palette.base0A}";
 
       menu-1-0 = "󰌍";
       menu-1-0-padding-right = "5pt";
       menu-1-0-exec = "#powermenu.open.0";
-      menu-1-0-foreground = "#${config.colorScheme.colors.base06}";
+      menu-1-0-foreground = "#${config.colorScheme.palette.base06}";
       menu-1-1 = "Reboot";
       menu-1-1-exec = "${pkgs.systemd}/bin/systemctl reboot";
-      menu-1-1-foreground = "#${config.colorScheme.colors.base08}";
+      menu-1-1-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-2-0 = "󰌍";
       menu-2-0-padding-right = "5pt";
       menu-2-0-exec = "#powermenu.open.0";
-      menu-2-0-foreground = "#${config.colorScheme.colors.base06}";
+      menu-2-0-foreground = "#${config.colorScheme.palette.base06}";
       menu-2-1 = "Power Off";
       menu-2-1-exec = "${pkgs.systemd}/bin/systemctl poweroff";
-      menu-2-1-foreground = "#${config.colorScheme.colors.base08}";
+      menu-2-1-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-3-0 = "󰌍";
       menu-3-0-padding-right = "5pt";
       menu-3-0-exec = "#powermenu.open.0";
-      menu-3-0-foreground = "#${config.colorScheme.colors.base06}";
+      menu-3-0-foreground = "#${config.colorScheme.palette.base06}";
       menu-3-1 = "Hibernate";
       menu-3-1-exec = "${pkgs.systemd}/bin/systemctl hibernate";
-      menu-3-1-foreground = "#${config.colorScheme.colors.base08}";
+      menu-3-1-foreground = "#${config.colorScheme.palette.base08}";
 
       menu-4-0 = "󰌍";
       menu-4-0-padding-right = "5pt";
       menu-4-0-exec = "#powermenu.open.0";
-      menu-4-0-foreground = "#${config.colorScheme.colors.base06}";
+      menu-4-0-foreground = "#${config.colorScheme.palette.base06}";
       menu-4-1 = "Log Out";
       #menu-4-1-exec = "${pkgs.i3}/bin/i3-msg exit";
       menu-4-1-exec = "${pkgs.xfce.xfce4-session}/bin/xfce4-session-logout --logout";
-      menu-4-1-foreground = "#${config.colorScheme.colors.base0A}";
+      menu-4-1-foreground = "#${config.colorScheme.palette.base0A}";
     };
   };
 }

@@ -30,9 +30,9 @@
       separator_height = 2;
       padding = 8;
       horizontal_padding = 8;
-      separator_color = "#${config.colorScheme.colors.base02}";
+      separator_color = "#${config.colorScheme.palette.base02}";
       frame_width = 2;
-      frame_color = "#${config.colorScheme.colors.base0B}";
+      frame_color = "#${config.colorScheme.palette.base0B}";
       icon_position = "left";
       close = "ctrl+space";
       close_all = "ctrl+shift+space";
@@ -40,19 +40,19 @@
       context = "ctrl+shift+period";
     };
     urgency_low = {
-      background = "#${config.colorScheme.colors.base00}";
-      foreground = "#${config.colorScheme.colors.base03}";
+      background = "#${config.colorScheme.palette.base00}";
+      foreground = "#${config.colorScheme.palette.base03}";
       timeout = 5;
     };
     urgency_normal = {
-      background = "#${config.colorScheme.colors.base00}";
-      foreground = "#${config.colorScheme.colors.base06}";
+      background = "#${config.colorScheme.palette.base00}";
+      foreground = "#${config.colorScheme.palette.base06}";
       timeout = 20;
     };
     urgency_critical = {
-      background = "#${config.colorScheme.colors.base00}";
-      foreground = "#${config.colorScheme.colors.base06}";
-      frame_color = "#${config.colorScheme.colors.base08}";
+      background = "#${config.colorScheme.palette.base00}";
+      foreground = "#${config.colorScheme.palette.base06}";
+      frame_color = "#${config.colorScheme.palette.base08}";
       timeout = 0;
     };
   };

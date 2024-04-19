@@ -37,6 +37,7 @@
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [ 
       "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
@@ -54,7 +55,10 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    enableStrongSwan = true;
+  };
 
   time.timeZone = "America/New_York";
 
@@ -71,8 +75,23 @@
     LC_TIME = "en_US.UTF-8";
   };
 
+  virtualisation.docker.rootless = {
+    enable = true;
+    setSocketVariable = true;
+  };
+  
+
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
+  security.pki.certificateFiles = [ 
+    ./assets/root_ca.pem 
+    ./assets/intermediate_ca.pem 
+    ./assets/dod_certificates.pem
+  ];
+  services.pcscd.enable = true; # Smartcard daemon
+  services.udev.packages = with pkgs; [
+    yubikey-personalization
+  ];
 
   # Enable and configure the X11 windowing system.
   services.xserver = {
@@ -131,6 +150,16 @@
     };
   };
   
+  environment.budgie.excludePackages = with pkgs; [
+    cinnamon.nemo
+  ];
+
+  environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
+    module: ${pkgs.opensc}/lib/opensc-pkcs11.so
+  '';
+
+  environment.etc.hosts.mode= "0644";
+
   services.fwupd.enable = true; # Firmware updates
   services.hardware.bolt.enable = true; # Thunderbolt daemon
   services.fprintd.enable = false; # Disable fingerprint reader (Overridden in specialisation)
@@ -151,7 +180,7 @@
   users.users.dap = {
     isNormalUser = true;
     description = "Dylan A Pitts";
-    extraGroups = [ "networkmanager" "wheel" "video" ];
+    extraGroups = [ "networkmanager" "wheel" "video" "dialout" ];
     shell = pkgs.zsh;
     packages = with pkgs; [ home-manager ];
   };
@@ -165,6 +194,13 @@
     git # SCM 
     gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
     gnome.seahorse # Gnome keyring management
+    (pkgs.writeShellScriptBin "setup-browser-cac" ''
+      NSSDB="''${HOME}/.pki/nssdb"
+      mkdir -p ''${NSSDB}
+
+      ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add p11-kit-proxy \
+        -libfile ${pkgs.p11-kit}/lib/p11-kit-proxy.so
+    '')
   ];
 
   # Power management
@@ -184,11 +220,21 @@
 
   programs.zsh.enable = true;
   programs.xfconf.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+  };
 
   hardware.opengl = {
     enable = true;
     driSupport = true;
     driSupport32Bit = true;
+  };
+
+  services.blueman.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
   };
 
   # See the following for details: https://nixos.wiki/wiki/Nvidia

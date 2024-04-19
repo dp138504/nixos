@@ -13,9 +13,10 @@
     ./rofi.nix
     ./dunst.nix
     ./kitty.nix
-    #./wezterm.nix
+    ./wezterm.nix
     ./modules/services/dunst.nix
     ./autorandr.nix
+    ./tmux.nix
   ];
 
   disabledModules = [
@@ -55,13 +56,19 @@
       nixfmt
       bitwarden
       tmux
-      vivaldi
+      unstable.vivaldi
       tree
       slack
       haskellPackages.greenclip # Rofi clipboard manager
       skypeforlinux
       discord
       xclip
+      inkscape # Vector image editor
+      gimp # Raster image editor
+      imagemagick # Needed for plugins in inkscape
+      unzip
+      super-slicer-latest
+      gnupg
       nvim-pkg
     ];
 
@@ -82,6 +89,14 @@
   # Add stuff for your user as you see fit:
   #programs.neovim.enable = true;
   programs.feh.enable = true;
+
+  programs.vscode = {
+    enable = true;
+    extensions = [ 
+      pkgs.vscode-extensions.ms-vscode-remote.remote-containers
+      pkgs.vscode-extensions.ms-vscode.cpptools
+    ];
+  };
 
   programs.zsh = {
     enable = true;
@@ -105,6 +120,9 @@
     enable = true;
     userEmail = "pitts.dylan@gmail.com";
     userName = "Dylan A. Pitts";
+    extraConfig = {
+      init = { defaultBranch = "main"; };  
+    };
   };
 
   services.betterlockscreen = {

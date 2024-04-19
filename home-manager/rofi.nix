@@ -8,11 +8,11 @@ in {
     theme = {
       "*" = {
         font = "JetBrainsMono NFM 12";
-        bg = mkLiteral "#${config.colorScheme.colors.base00}";
-        fg = mkLiteral "#${config.colorScheme.colors.base06}";
-        fg2 = mkLiteral "#${config.colorScheme.colors.base02}";
-        accent = mkLiteral "#${config.colorScheme.colors.base0B}";
-        urgent = mkLiteral "#${config.colorScheme.colors.base08}";
+        bg = mkLiteral "#${config.colorScheme.palette.base00}";
+        fg = mkLiteral "#${config.colorScheme.palette.base06}";
+        fg2 = mkLiteral "#${config.colorScheme.palette.base02}";
+        accent = mkLiteral "#${config.colorScheme.palette.base0B}";
+        urgent = mkLiteral "#${config.colorScheme.palette.base08}";
 
         background-color = mkLiteral "transparent";
         text-color = mkLiteral "@fg";

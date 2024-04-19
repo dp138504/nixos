@@ -24,32 +24,32 @@
 
       colors = {
         focused = {
-          border = "#${config.colorScheme.colors.base0B}";
-          background = "#${config.colorScheme.colors.base0B}";
-          text = "#${config.colorScheme.colors.base0B}";
-          indicator = "#${config.colorScheme.colors.base0D}";
-          childBorder = "#${config.colorScheme.colors.base0B}";
+          border = "#${config.colorScheme.palette.base0B}";
+          background = "#${config.colorScheme.palette.base0B}";
+          text = "#${config.colorScheme.palette.base0B}";
+          indicator = "#${config.colorScheme.palette.base0D}";
+          childBorder = "#${config.colorScheme.palette.base0B}";
         };
         unfocused = {
-          border = "#${config.colorScheme.colors.base02}";
-          background = "#${config.colorScheme.colors.base02}";
-          text = "#${config.colorScheme.colors.base00}";
-          indicator = "#${config.colorScheme.colors.base0D}";
-          childBorder = "#${config.colorScheme.colors.base02}";
+          border = "#${config.colorScheme.palette.base02}";
+          background = "#${config.colorScheme.palette.base02}";
+          text = "#${config.colorScheme.palette.base00}";
+          indicator = "#${config.colorScheme.palette.base0D}";
+          childBorder = "#${config.colorScheme.palette.base02}";
         };
         focusedInactive = {
-          border = "#${config.colorScheme.colors.base02}";
-          background = "#${config.colorScheme.colors.base02}";
-          text = "#${config.colorScheme.colors.base00}";
-          indicator = "#${config.colorScheme.colors.base0D}";
-          childBorder = "#${config.colorScheme.colors.base02}";
+          border = "#${config.colorScheme.palette.base02}";
+          background = "#${config.colorScheme.palette.base02}";
+          text = "#${config.colorScheme.palette.base00}";
+          indicator = "#${config.colorScheme.palette.base0D}";
+          childBorder = "#${config.colorScheme.palette.base02}";
         };
         urgent = {
-          border = "#${config.colorScheme.colors.base08}";
-          background = "#${config.colorScheme.colors.base08}";
-          text = "#${config.colorScheme.colors.base08}";
-          indicator = "#${config.colorScheme.colors.base08}";
-          childBorder = "#${config.colorScheme.colors.base08}";
+          border = "#${config.colorScheme.palette.base08}";
+          background = "#${config.colorScheme.palette.base08}";
+          text = "#${config.colorScheme.palette.base08}";
+          indicator = "#${config.colorScheme.palette.base08}";
+          childBorder = "#${config.colorScheme.palette.base08}";
         };
       };
 

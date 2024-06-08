@@ -1,6 +1,6 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ inputs, outputs, pkgs, nix-colors, ... }:
+{ config, lib, inputs, outputs, pkgs, nix-colors, ... }:
 
 {
   imports = [
@@ -12,7 +12,7 @@
     ./polybar.nix
     ./rofi.nix
     ./dunst.nix
-    ./kitty.nix
+#    ./kitty.nix
     ./wezterm.nix
     ./modules/services/dunst.nix
     ./autorandr.nix
@@ -98,9 +98,14 @@
     ];
   };
 
+  programs.texlive = {
+    enable = true;
+    extraPackages = tpkgs: { inherit (tpkgs) scheme-full; inherit (pkgs) acrotex; };
+  };
+
   programs.zsh = {
     enable = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;

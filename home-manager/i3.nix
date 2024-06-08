@@ -5,7 +5,7 @@
     enable = true;
     config = rec {
       modifier = "Mod4";
-      terminal = "kitty";
+      terminal = "wezterm";
 
       fonts = {
         names = [ "JetBrainsMono Nerd Font Mono" ];

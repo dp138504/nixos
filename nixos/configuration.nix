@@ -80,6 +80,15 @@
     setSocketVariable = true;
   };
   
+  virtualisation.libvirtd.enable = true;
+  virtualisation.libvirtd.qemu = {
+    runAsRoot = true;
+    ovmf = {
+      packages = [pkgs.OVMFFull.fd];
+      enable = true;
+    };
+  };
+  programs.virt-manager.enable = true;
 
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
@@ -93,20 +102,40 @@
     yubikey-personalization
   ];
 
+
+  # Enable touchpad support (enabled default in most desktopManager).
+  services.libinput.enable = true;
+
   # Enable and configure the X11 windowing system.
   services.xserver = {
     enable = true;
     exportConfiguration = true;
     videoDrivers = [ "nvidia" ];
     # Set keyboard layout
-    layout = "us";
+    xkb.layout = "us";
     xkb.variant = "";
-    # Enable touchpad support (enabled default in most desktopManager).
-    libinput.enable = true;
+      
+    desktopManager = {
+      xterm.enable = false;
+      budgie = { enable = true; }; # Default Desktop Environment
+      xfce = {
+        enable = true;
+        noDesktop = true; 
+        enableXfwm = false;
+        enableScreensaver = true;
+      };
+    };
 
+    windowManager.i3 = {
+      enable = true;
+      package = pkgs.i3-gaps;
+      extraPackages = with pkgs; [ i3lock-color ];
+    };
+  };
 
-    displayManager = {
+    services.displayManager = {
       defaultSession = "xfce+i3";
+      sddm.enable = true;
       sddm.settings = {
         X11 = {
           DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
@@ -132,23 +161,7 @@
      # '';
     };
 
-    desktopManager = {
-      xterm.enable = false;
-      budgie = { enable = true; }; # Default Desktop Environment
-      xfce = {
-        enable = true;
-        noDesktop = true; 
-        enableXfwm = false;
-        enableScreensaver = true;
-      };
-    };
 
-    windowManager.i3 = {
-      enable = true;
-      package = pkgs.i3-gaps;
-      extraPackages = with pkgs; [ i3lock-color ];
-    };
-  };
   
   environment.budgie.excludePackages = with pkgs; [
     cinnamon.nemo
@@ -163,7 +176,13 @@
   services.fwupd.enable = true; # Firmware updates
   services.hardware.bolt.enable = true; # Thunderbolt daemon
   services.fprintd.enable = false; # Disable fingerprint reader (Overridden in specialisation)
-  services.printing.enable = true; # Enable CUPS to print documents.
+  
+  services.printing = {
+    enable = true; # Enable CUPS to print documents.
+    drivers = [ 
+      pkgs.epson-escpr
+    ];
+  };
 
   # Enable sound with pipewire.
   sound.enable = true;
@@ -293,7 +312,7 @@
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
-
+  #
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?

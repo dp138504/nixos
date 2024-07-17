@@ -5,7 +5,7 @@
   gtk3,
   breeze-icons,
   gnome-icon-theme,
-  hicolor-icon-theme
+  hicolor-icon-theme,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,7 +28,11 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [ breeze-icons gnome-icon-theme hicolor-icon-theme ];
+  propagatedBuildInputs = [
+    breeze-icons
+    gnome-icon-theme
+    hicolor-icon-theme
+  ];
 
   installPhase = ''
     mkdir -p $out/share/icons/Gruvbox-Plus-Dark

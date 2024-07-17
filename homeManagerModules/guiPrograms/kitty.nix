@@ -1,4 +1,8 @@
-{ config, lib, pkgs, ... }: 
+{
+  config,
+  lib,
+  ...
+}:
 {
   options = {
     kitty.enable = lib.mkEnableOption "Enable kitty";
@@ -11,7 +15,7 @@
         font.name = "JetBrainsMono Nerd Font Mono";
         font.size = 12;
         settings = {
-  
+
           # https://github.com/kdrag0n/base16-kitty/blob/master/colors/base16-gruvbox-dark-medium.conf
           background_opacity = "0.9";
           foreground = "#${config.colorScheme.palette.base06}";
@@ -27,7 +31,7 @@
           inactive_tab_background = "#${config.colorScheme.palette.base01}";
           inactive_tab_foreground = "#${config.colorScheme.palette.base04}";
           tab_bar_background = "#${config.colorScheme.palette.base01}";
-  
+
           # Normal
           color0 = "#${config.colorScheme.palette.base00}";
           color1 = "#${config.colorScheme.palette.base08}";
@@ -37,7 +41,7 @@
           color5 = "#${config.colorScheme.palette.base0E}";
           color6 = "#${config.colorScheme.palette.base0C}";
           color7 = "#${config.colorScheme.palette.base05}";
-          
+
           # Bright
           color8 = "#${config.colorScheme.palette.base03}";
           color9 = "#${config.colorScheme.palette.base09}";

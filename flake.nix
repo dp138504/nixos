@@ -25,51 +25,56 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  
-  outputs = {
-    self,
-    nixpkgs,
-    home-manager,
-    hardware,
-    nix-colors,
-    kickstart-nix-nvim,
-    sddm-surgar-candy-nix,
-    ...
-  } @ inputs: let
-    inherit (self) outputs;
-    systems = [
-      "x86_64-linux"
-    ];
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-    overlays = import ./overlays { inherit inputs;};
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
-    nixosConfigurations = {
-      fw13-nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        modules = [
-	      ./hosts/fw13-nixos/configuration.nix
-        ./nixosModules
-	      hardware.nixosModules.framework-13th-gen-intel
-        hardware.nixosModules.common-gpu-nvidia-nonprime
-        sddm-surgar-candy-nix.nixosModules.default
-	    ];
-      };
-    };
 
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      "dap@fw13-nixos" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = {inherit inputs outputs nix-colors;};
-        modules = [
-	      ./hosts/fw13-nixos/home.nix
-        ./homeManagerModules
-	    ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      home-manager,
+      hardware,
+      nix-colors,
+      kickstart-nix-nvim,
+      sddm-surgar-candy-nix,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+      systems = [ "x86_64-linux" ];
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      overlays = import ./overlays { inherit inputs; };
+      # NixOS configuration entrypoint
+      # Available through 'nixos-rebuild --flake .#your-hostname'
+      nixosConfigurations = {
+        fw13-nixos = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+          };
+          modules = [
+            ./hosts/fw13-nixos/configuration.nix
+            ./nixosModules
+            hardware.nixosModules.framework-13th-gen-intel
+            hardware.nixosModules.common-gpu-nvidia-nonprime
+            sddm-surgar-candy-nix.nixosModules.default
+          ];
+        };
+      };
+
+      # Standalone home-manager configuration entrypoint
+      # Available through 'home-manager --flake .#your-username@your-hostname'
+      homeConfigurations = {
+        "dap@fw13-nixos" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          extraSpecialArgs = {
+            inherit inputs outputs nix-colors;
+          };
+          modules = [
+            ./hosts/fw13-nixos/home.nix
+            ./homeManagerModules
+          ];
+        };
       };
     };
-  };
 }

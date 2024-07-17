@@ -1,7 +1,8 @@
 # This file defines overlays
-{ inputs, ... }: {
+{ inputs, ... }:
+{
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs {pkgs = final;};
+  additions = final: _prev: import ../pkgs { pkgs = final; };
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
@@ -10,10 +11,10 @@
     polybar = prev.polybar.overrideAttrs (old: {
       src = prev.fetchFromGitHub {
         rev = "3.7.0";
-	hash = "sha256-Z1rL9WvEZHr5M03s9KCJ6O6rNuaK7PpwUDaatYuCocI=";
-	owner = "polybar";
-	repo = "polybar";
-	fetchSubmodules = true;
+        hash = "sha256-Z1rL9WvEZHr5M03s9KCJ6O6rNuaK7PpwUDaatYuCocI=";
+        owner = "polybar";
+        repo = "polybar";
+        fetchSubmodules = true;
       };
     });
   };
@@ -27,4 +28,3 @@
     };
   };
 }
-

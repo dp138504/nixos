@@ -2,15 +2,18 @@
   pkgs ? import <nixpkgs> { system = builtins.currentSystem; },
   stdenv,
   lib,
-  fetchurl, 
-  unzip
+  fetchurl,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
   version = "2.4.3";
   pname = "acrotex";
   name = "${pname}-${version}";
-  outputs = ["out" "tex"];
+  outputs = [
+    "out"
+    "tex"
+  ];
   tlType = "run";
 
   src = fetchurl {
@@ -18,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QENWO4xLwVUm4MTJzKWFZD9Be/6wvhvcxxLVcuvolN8=";
   };
 
-  buildInputs = [ unzip pkgs.texliveBasic];
+  buildInputs = [
+    unzip
+    pkgs.texliveBasic
+  ];
 
   # Multiple files problem
   unpackPhase = ''
@@ -28,7 +34,7 @@ stdenv.mkDerivation rec {
     cd acrotex
 
     runHook postUnpack
-  ''; 
+  '';
 
   buildPhase = ''
     runHook preBuild

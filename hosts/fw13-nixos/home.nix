@@ -1,6 +1,12 @@
 # This is your home-manager configuration file
 # Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
-{ config, lib, inputs, outputs, pkgs, nix-colors, ... }:
+{
+  inputs,
+  outputs,
+  pkgs,
+  nix-colors,
+  ...
+}:
 
 {
   imports = [
@@ -10,18 +16,11 @@
 
   # Toggleable modules defined in ../../homeManagerModules/
   i3.enable = true;
-  polybar.enable = true;
-  rofi.enable = true;
-  dunst.enable = true;
   wezterm.enable = true;
   autorandr.enable = true;
   tmux.enable = true;
-  zsh.enable = true;
+  zsh.enable = true; # System specific aliases defined below
   texlive.enable = true;
-
-  disabledModules = [
-    "services/dunst.nix" # disable upstream to customize icon path and categories
-  ];
 
   nixpkgs = {
     overlays = [
@@ -53,7 +52,7 @@
     homeDirectory = "/home/dap";
     packages = with pkgs; [
       (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      nixfmt
+      nixfmt-rfc-style
       bitwarden
       tmux
       unstable.vivaldi
@@ -72,28 +71,14 @@
       nvim-pkg
       obsidian
     ];
-
-    file.".config/greenclip.toml".text = ''
-      [greenclip]
-      blacklisted_applications = []
-      enable_image_support = true
-      history_file = "/home/dap/.cache/greenclip.history"
-      image_cache_directory = "/tmp/greenclip"
-      max_history_length = 50
-      max_selection_size_bytes = 0
-      static_history = [""]
-      trim_space_from_selection = true
-      use_primary_selection_as_input = false
-    '';
   };
 
   # Add stuff for your user as you see fit:
   #programs.neovim.enable = true;
-  programs.feh.enable = true;
 
   programs.vscode = {
     enable = true;
-    extensions = [ 
+    extensions = [
       pkgs.vscode-extensions.ms-vscode-remote.remote-containers
       pkgs.vscode-extensions.ms-vscode.cpptools
     ];
@@ -114,24 +99,9 @@
     userEmail = "pitts.dylan@gmail.com";
     userName = "Dylan A. Pitts";
     extraConfig = {
-      init = { defaultBranch = "main"; };  
-    };
-  };
-
-  services.picom = {
-    enable = true;
-    vSync = true;
-  };
-
-  gtk = {
-    enable = true;
-    iconTheme.name = "Gruvbox-Plus-Dark";
-    cursorTheme.package = pkgs.gnome.adwaita-icon-theme;
-    cursorTheme.name = "Adwaita";
-    cursorTheme.size = 24;
-    theme = {
-      package = pkgs.gruvbox-gtk-theme;
-      name = "Gruvbox-Dark-BL";
+      init = {
+        defaultBranch = "main";
+      };
     };
   };
 

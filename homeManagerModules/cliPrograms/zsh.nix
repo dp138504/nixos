@@ -1,10 +1,14 @@
-{  lib, config, pkgs, ...}:
+{
+  lib,
+  config,
+  ...
+}:
 {
 
   options = {
     zsh.enable = lib.mkEnableOption "Enables zsh customization";
   };
-  
+
   config = lib.mkIf config.zsh.enable {
     programs.zsh = {
       enable = true;
@@ -13,7 +17,11 @@
       oh-my-zsh = {
         enable = true;
         theme = "half-life";
-        plugins = [ "git" "tmux" "sudo" ];
+        plugins = [
+          "git"
+          "tmux"
+          "sudo"
+        ];
       };
       envExtra = lib.mkIf config.tmux.enable ''
         if [ -x "$(command -v tmux)" ] && [ -n "''${DISPLAY}" ] && [ -z "''${TMUX}" ]; then

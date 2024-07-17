@@ -1,11 +1,16 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
   options = {
     polybar.enable = lib.mkEnableOption "Enables Polybar";
   };
-  
+
   config = lib.mkIf config.polybar.enable {
     services.polybar.enable = true;
     services.polybar.script = "polybar top &";
@@ -28,8 +33,7 @@
         radius = 0;
         enable-ipc = true;
         modules-left = "i3 xwindow";
-        modules-right =
-          "cpu memory lan wlan battery alsa backlight tray powermenu";
+        modules-right = "cpu memory lan wlan battery alsa backlight tray powermenu";
         modules-center = "date";
         font-0 = ''"JetBrainsMono NF;2"'';
         font-1 = ''"Noto Color Emoji:scale=10; 2"'';
@@ -87,7 +91,13 @@
         card = "intel_backlight";
         format = "<ramp> <label>";
         label = "%percentage%%";
-        ramp = [ "🌑" "🌒" "🌓" "🌔" "🌕" ];
+        ramp = [
+          "🌑"
+          "🌒"
+          "🌓"
+          "🌔"
+          "🌕"
+        ];
       };
       "module/alsa" = {
         type = "internal/alsa";
@@ -97,7 +107,11 @@
         format-volume = "<ramp-volume> <label-volume>";
         label-muted = "󰝟";
         label-volume = "%percentage%%";
-        ramp.volume = [ "󰕿" "󰖀" "󰕾" ];
+        ramp.volume = [
+          "󰕿"
+          "󰖀"
+          "󰕾"
+        ];
       };
       "module/battery" = {
         type = "internal/battery";
@@ -105,8 +119,20 @@
         low-at = 15;
         battery = "BAT1";
         adapter = "ACAD";
-        ramp.capacity = [ "" "" "" "" "" ];
-        animation.charging = [ "" "" "" "" "" ];
+        ramp.capacity = [
+          ""
+          ""
+          ""
+          ""
+          ""
+        ];
+        animation.charging = [
+          ""
+          ""
+          ""
+          ""
+          ""
+        ];
         animation-charging-framerate = 750;
         format = {
           discharging = "<ramp-capacity>  <label-discharging>";
@@ -120,7 +146,10 @@
           low = " %time%";
         };
         time-format = "%H:%M";
-        animation.low = [ "" "" ];
+        animation.low = [
+          ""
+          ""
+        ];
         animation-low-framerate = 750;
       };
       "module/wlan" = {

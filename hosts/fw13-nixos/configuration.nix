@@ -2,7 +2,14 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ inputs, outputs, lib, config, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -24,8 +31,7 @@
 
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}")
-      config.nix.registry;
+    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
 
     settings = {
       # Enable flakes and new 'nix' command
@@ -39,13 +45,22 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 5;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ 
-      "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
-    ];
+  boot.kernelParams = [
+    "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
+  ];
   boot.plymouth = {
     enable = true; # Graphical boot
-    themePackages = [ 
-      (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "angular" "angular_alt" "connect" "deus_ex" "green_blocks" "hexagon_dots_alt"]; })
+    themePackages = [
+      (pkgs.adi1090x-plymouth-themes.override {
+        selected_themes = [
+          "angular"
+          "angular_alt"
+          "connect"
+          "deus_ex"
+          "green_blocks"
+          "hexagon_dots_alt"
+        ];
+      })
     ];
     theme = "hexagon_dots_alt";
   };
@@ -79,12 +94,12 @@
     enable = true;
     setSocketVariable = true;
   };
-  
+
   virtualisation.libvirtd.enable = true;
   virtualisation.libvirtd.qemu = {
     runAsRoot = true;
     ovmf = {
-      packages = [pkgs.OVMFFull.fd];
+      packages = [ pkgs.OVMFFull.fd ];
       enable = true;
     };
   };
@@ -92,16 +107,13 @@
 
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
-  security.pki.certificateFiles = [ 
-    ../../assets/root_ca.pem 
-    ../../assets/intermediate_ca.pem 
+  security.pki.certificateFiles = [
+    ../../assets/root_ca.pem
+    ../../assets/intermediate_ca.pem
     ../../assets/dod_certificates.pem
   ];
   services.pcscd.enable = true; # Smartcard daemon
-  services.udev.packages = with pkgs; [
-    yubikey-personalization
-  ];
-
+  services.udev.packages = with pkgs; [ yubikey-personalization ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -114,13 +126,15 @@
     # Set keyboard layout
     xkb.layout = "us";
     xkb.variant = "";
-      
+
     desktopManager = {
       xterm.enable = false;
-      budgie = { enable = true; }; # Default Desktop Environment
+      budgie = {
+        enable = true;
+      }; # Default Desktop Environment
       xfce = {
         enable = true;
-        noDesktop = true; 
+        noDesktop = true;
         enableXfwm = false;
         enableScreensaver = true;
       };
@@ -133,55 +147,49 @@
     };
   };
 
-    services.displayManager = {
-      defaultSession = "xfce+i3";
-      sddm.enable = true;
-      sddm.settings = {
-        X11 = {
-          DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
-        };
+  services.displayManager = {
+    defaultSession = "xfce+i3";
+    sddm.enable = true;
+    sddm.settings = {
+      X11 = {
+        DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
       };
-      sddm.sugarCandyNix = {
-        enable = true;
-        settings = {
-          Background = lib.cleanSource ../../assets/background_2256x1504.jpg;
-          ScreenWidth = 2256;
-          ScreenHeight = 1504;
-          FormPosition = "left";
-          HaveFormBackground = true;
-          PartialBlur = true;
-          DateFormat = "dddd, MMMM d, yyyy";
-          ForceHideCompletePassword = true; # Do not show any password characters
-          HeaderText = "";
-          Font = "JetBrainsMono Nerd Font Mono";
-        };
-      };
-     # setupCommands = lib.mkAfter ''
-     #   ${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)
-     # '';
     };
+    sddm.sugarCandyNix = {
+      enable = true;
+      settings = {
+        Background = lib.cleanSource ../../assets/background_2256x1504.jpg;
+        ScreenWidth = 2256;
+        ScreenHeight = 1504;
+        FormPosition = "left";
+        HaveFormBackground = true;
+        PartialBlur = true;
+        DateFormat = "dddd, MMMM d, yyyy";
+        ForceHideCompletePassword = true; # Do not show any password characters
+        HeaderText = "";
+        Font = "JetBrainsMono Nerd Font Mono";
+      };
+    };
+    # setupCommands = lib.mkAfter ''
+    #   ${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)
+    # '';
+  };
 
-
-  
-  environment.budgie.excludePackages = with pkgs; [
-    cinnamon.nemo
-  ];
+  environment.budgie.excludePackages = with pkgs; [ cinnamon.nemo ];
 
   environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
   '';
 
-  environment.etc.hosts.mode= "0644";
+  environment.etc.hosts.mode = "0644";
 
   services.fwupd.enable = true; # Firmware updates
   services.hardware.bolt.enable = true; # Thunderbolt daemon
   services.fprintd.enable = false; # Disable fingerprint reader (Overridden in specialisation)
-  
+
   services.printing = {
     enable = true; # Enable CUPS to print documents.
-    drivers = [ 
-      pkgs.epson-escpr
-    ];
+    drivers = [ pkgs.epson-escpr ];
   };
 
   # Enable sound with pipewire.
@@ -199,7 +207,12 @@
   users.users.dap = {
     isNormalUser = true;
     description = "Dylan A Pitts";
-    extraGroups = [ "networkmanager" "wheel" "video" "dialout" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "video"
+      "dialout"
+    ];
     shell = pkgs.zsh;
     packages = with pkgs; [ home-manager ];
   };
@@ -210,7 +223,7 @@
     vim # Text editor
     fprintd # Fingerprint reader daemon
     powertop # Power management monitor
-    git # SCM 
+    git # SCM
     gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
     gnome.seahorse # Gnome keyring management
     (pkgs.writeShellScriptBin "setup-browser-cac" ''
@@ -225,18 +238,19 @@
 
   # Power management
   powerManagement.powertop.enable = true; # View power usage
-  services.tlp = { # Laptop power saving utility
+  services.tlp = {
+    # Laptop power saving utility
     enable = true;
-    settings = { 
+    settings = {
       PCIE_ASPM_ON_BAT = "powersupersave";
       PCIE_ASPM_ON_AC = "on"; # Force PCIe (i.e. eGPU) devices to "on" when on external power
-      };
+    };
   };
 
-#  services.logind = {
-#    lidSwitch = "ignore";
-#    lidSwitchExternalPower = "ignore";
-#  };
+  #  services.logind = {
+  #    lidSwitch = "ignore";
+  #    lidSwitchExternalPower = "ignore";
+  #  };
 
   programs.zsh.enable = true;
   programs.xfconf.enable = true;
@@ -317,5 +331,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

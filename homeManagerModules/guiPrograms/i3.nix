@@ -1,33 +1,77 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
   options = {
-    i3.enable = lib.mkEnableOption "Enables i3wm";
+    i3.enable = lib.mkEnableOption "Enables i3wm and supporting applications";
   };
 
   config = lib.mkIf config.i3.enable {
+
+    ######################################
+    ## Supporting applications for i3wm ##
+    ######################################
+
+    ## Preferred Bar ##
+    polybar.enable = true;
+
+    ## Dmenu style application launcher ##
+    rofi.enable = true;
+
+    ## Dunst notification daemon ##
+    dunst.enable = true;
+
+    ## Compositor ##
+    services.picom = {
+      enable = true;
+      vSync = true;
+    };
+
+    ## Lightweight image viewer/background setter ##
+    programs.feh.enable = true;
+
+    ## GTK themeing for custom icon pack ##
+    gtk = {
+      enable = true;
+      iconTheme.name = "Gruvbox-Plus-Dark";
+      cursorTheme.package = pkgs.gnome.adwaita-icon-theme;
+      cursorTheme.name = "Adwaita";
+      cursorTheme.size = 24;
+      theme = {
+        package = pkgs.gruvbox-gtk-theme;
+        name = "Gruvbox-Dark-BL";
+      };
+    };
+
+    #############################
+    ## Main i3wm configuration ##
+    #############################
     xsession.windowManager.i3 = {
       enable = true;
       config = rec {
         modifier = "Mod4";
         terminal = "wezterm";
-  
+
         fonts = {
           names = [ "JetBrainsMono Nerd Font Mono" ];
           size = 12.0;
         };
-  
+
         window = {
           border = 1;
           titlebar = false;
         };
-  
+
         gaps = {
           inner = 6;
           outer = 3;
         };
-  
+
         colors = {
           focused = {
             border = "#${config.colorScheme.palette.base0B}";
@@ -58,7 +102,7 @@
             childBorder = "#${config.colorScheme.palette.base08}";
           };
         };
-  
+
         startup = [
           {
             command = "systemctl --user restart polybar";
@@ -70,11 +114,6 @@
             always = true;
             notification = false;
           }
-  #        {
-  #          command = "betterlockscreen -w";
-  #          always = true;
-  #          notification = false;
-  #        }
           {
             command = "greenclip daemon > /dev/null";
             always = true;
@@ -85,11 +124,6 @@
             always = true;
             notification = false;
           }
-          #{
-          #  command = "${pkgs.xfce.xfce4-settings}/libexec/xfce4-settings";
-          #  always = true;
-          #  notification = false;
-          #}
           {
             command = "sleep 3; ${pkgs.feh}/bin/feh --bg-scale /etc/nixos/nixos/assets/background_2256x1504.jpg --no-fehbg";
             always = true;
@@ -105,37 +139,34 @@
             always = true;
             notification = false;
           }
-  
         ];
-  
+
         keybindings = lib.mkOptionDefault {
           "XF86AudioMute" = "exec amixer set Master toggle";
           "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
           "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
           "XF86MonBrightnessDown" = "exec xbacklight -dec 5";
           "XF86MonBrightnessUp" = "exec xbacklight -inc 5";
-  
+
           # Focus
           "${modifier}+j" = "focus left";
           "${modifier}+k" = "focus down";
           #"${modifier}+l" = "focus up";
           "${modifier}+semicolon" = "focus right";
-  
+
           # Move
           "${modifier}+Shift+j" = "move left";
           "${modifier}+Shift+k" = "move down";
           "${modifier}+Shift+l" = "move up";
           "${modifier}+Shift+semicolon" = "move right";
-  
-          "${modifier}+d" =
-            "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
-  
+
+          "${modifier}+d" = "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
+
           #"${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";
           "${modifier}+l" = "exec xflock4";
-          "${modifier}+c" = ''
-            exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
+          "${modifier}+c" = ''exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
         };
-  
+
         bars = [ ]; # Disable i3bar for polybar use
       };
     };

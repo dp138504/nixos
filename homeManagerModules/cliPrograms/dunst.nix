@@ -1,20 +1,33 @@
-{ lib, config, pkgs, ... }: {
-  
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
+
   imports = [ ../services/dunst.nix ];
 
   options = {
     dunst.enable = lib.mkEnableOption "Enables Dunst";
   };
 
+  disabledModules = [
+    "services/dunst.nix" # disable upstream to customize icon path and categories
+  ];
+
   config = lib.mkIf config.dunst.enable {
 
     services.dunst.enable = true;
+
     services.dunst.iconTheme = {
       package = pkgs.gruvbox-plus-icons-pack;
       name = "Gruvbox-Plus-Dark";
       size = "24";
     };
+
     services.dunst.additionalCategories = [ "panel" ];
+
     services.dunst.settings = {
       global = {
         font = "JetBrainsMono NFM 12";
@@ -48,16 +61,19 @@
         history = "ctrl+grave";
         context = "ctrl+shift+period";
       };
+
       urgency_low = {
         background = "#${config.colorScheme.palette.base00}";
         foreground = "#${config.colorScheme.palette.base03}";
         timeout = 5;
       };
+
       urgency_normal = {
         background = "#${config.colorScheme.palette.base00}";
         foreground = "#${config.colorScheme.palette.base06}";
         timeout = 20;
       };
+
       urgency_critical = {
         background = "#${config.colorScheme.palette.base00}";
         foreground = "#${config.colorScheme.palette.base06}";

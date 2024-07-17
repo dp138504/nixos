@@ -8,7 +8,7 @@
   config = lib.mkIf config.wezterm.enable {
     programs.wezterm = {
       enable = true;
-  
+
       colorSchemes.nix-colors = {
         ansi = [
           "#${config.colorScheme.palette.base00}"

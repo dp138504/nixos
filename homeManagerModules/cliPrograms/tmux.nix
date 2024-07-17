@@ -36,7 +36,7 @@
         bind "\\" split-window -hc "#{pane_current_path}"
         bind "-" split-window -vc "#{pane_current_path}"
         bind "_" split-window -vc "#{pane_current_path}"
-        bind C command-prompt -p "Session Name: "new-session -A -s '%%'"
+        bind C command-prompt -p "Session Name:" "new-session -A -s '%%'"
         bind X confirm kill-session
 
         set-option -g allow-rename off

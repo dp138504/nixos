@@ -6,18 +6,18 @@
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
     inputs.nix-colors.homeManagerModule
-
-    # You can also split up your configuration and import pieces of it here:
-    ./i3.nix
-    ./polybar.nix
-    ./rofi.nix
-    ./dunst.nix
-#    ./kitty.nix
-    ./wezterm.nix
-    ./modules/services/dunst.nix
-    ./autorandr.nix
-    ./tmux.nix
   ];
+
+  # Toggleable modules defined in ../../homeManagerModules/
+  i3.enable = true;
+  polybar.enable = true;
+  rofi.enable = true;
+  dunst.enable = true;
+  wezterm.enable = true;
+  autorandr.enable = true;
+  tmux.enable = true;
+  zsh.enable = true;
+  texlive.enable = true;
 
   disabledModules = [
     "services/dunst.nix" # disable upstream to customize icon path and categories
@@ -61,7 +61,7 @@
       slack
       haskellPackages.greenclip # Rofi clipboard manager
       skypeforlinux
-      discord
+      unstable.discord
       xclip
       inkscape # Vector image editor
       gimp # Raster image editor
@@ -70,6 +70,7 @@
       super-slicer-latest
       gnupg
       nvim-pkg
+      obsidian
     ];
 
     file.".config/greenclip.toml".text = ''
@@ -98,20 +99,7 @@
     ];
   };
 
-  programs.texlive = {
-    enable = true;
-    extraPackages = tpkgs: { inherit (tpkgs) scheme-full; inherit (pkgs) acrotex; };
-  };
-
   programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    oh-my-zsh = {
-      enable = true;
-      theme = "half-life";
-      plugins = [ "git" "tmux" "sudo" ];
-    };
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos/#fw13-nixos";
       update = "home-manager switch --flake /etc/nixos/#dap@fw13-nixos";
@@ -128,25 +116,6 @@
     extraConfig = {
       init = { defaultBranch = "main"; };  
     };
-  };
-
-  services.betterlockscreen = {
-    enable = false;
-    package = pkgs.unstable.betterlockscreen;
-    inactiveInterval = 5;
-    arguments = [ "dimblur --off 120" ];
-  };
-
-  services.screen-locker = {
-    enable = false;
-    xautolock.enable = false;
-  };
-
-  services.xidlehook = {
-    enable = false;
-    detect-sleep = true;
-    not-when-audio = true;
-    not-when-fullscreen = true;
   };
 
   services.picom = {

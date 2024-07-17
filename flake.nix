@@ -50,7 +50,8 @@
       fw13-nixos = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
         modules = [
-	      ./nixos/configuration.nix
+	      ./hosts/fw13-nixos/configuration.nix
+        ./nixosModules
 	      hardware.nixosModules.framework-13th-gen-intel
         hardware.nixosModules.common-gpu-nvidia-nonprime
         sddm-surgar-candy-nix.nixosModules.default
@@ -65,7 +66,8 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs nix-colors;};
         modules = [
-	      ./home-manager/home.nix
+	      ./hosts/fw13-nixos/home.nix
+        ./homeManagerModules
 	    ];
       };
     };

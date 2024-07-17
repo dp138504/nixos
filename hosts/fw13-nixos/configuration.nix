@@ -93,9 +93,9 @@
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
   security.pki.certificateFiles = [ 
-    ./assets/root_ca.pem 
-    ./assets/intermediate_ca.pem 
-    ./assets/dod_certificates.pem
+    ../../assets/root_ca.pem 
+    ../../assets/intermediate_ca.pem 
+    ../../assets/dod_certificates.pem
   ];
   services.pcscd.enable = true; # Smartcard daemon
   services.udev.packages = with pkgs; [
@@ -144,7 +144,7 @@
       sddm.sugarCandyNix = {
         enable = true;
         settings = {
-          Background = lib.cleanSource ./assets/background_2256x1504.jpg;
+          Background = lib.cleanSource ../../assets/background_2256x1504.jpg;
           ScreenWidth = 2256;
           ScreenHeight = 1504;
           FormPosition = "left";
@@ -220,6 +220,7 @@
       ${pkgs.nssTools}/bin/modutil -force -dbdir sql:$NSSDB -add p11-kit-proxy \
         -libfile ${pkgs.p11-kit}/lib/p11-kit-proxy.so
     '')
+    nfs-utils
   ];
 
   # Power management

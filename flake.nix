@@ -75,6 +75,17 @@
             ./homeManagerModules
           ];
         };
+        "dap" = home-manager.lib.homeManagerConfiguration {
+          # Kali Config
+          pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+          extraSpecialArgs = {
+            inherit inputs outputs nix-colors;
+          };
+          modules = [
+            ./hosts/fw13-kali/home.nix
+            ./homeManagerModules
+          ];
+        };
       };
     };
 }

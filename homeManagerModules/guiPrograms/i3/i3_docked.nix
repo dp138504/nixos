@@ -46,7 +46,7 @@
           "${modifier}+u" = "workspace number 8";
           "${modifier}+y" = "workspace number 9";
           "${modifier}+semicolon" = "workspace number 10";
-          
+
           "${modifier}+Shift+q" = "move container to workspace number 1";
           "${modifier}+Shift+w" = "move container to workspace number 2";
           "${modifier}+Shift+f" = "move container to workspace number 3";

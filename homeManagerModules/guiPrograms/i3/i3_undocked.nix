@@ -15,7 +15,7 @@
 
     xsession.windowManager.i3 = {
       config = rec {
-        modifier = "Mod4"; 
+        modifier = "Mod4";
         keybindings = lib.mkOptionDefault {
           "XF86AudioMute" = "exec amixer set Master toggle";
           "XF86AudioLowerVolume" = "exec amixer set Master 4%-";

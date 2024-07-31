@@ -57,7 +57,11 @@
       home.packages = with pkgs; [
         (hiPrio (writeShellApplication {
           name = "toggle-bindings";
-          runtimeInputs = with pkgs; [ home-manager coreutils ripgrep ];
+          runtimeInputs = with pkgs; [
+            home-manager
+            coreutils
+            ripgrep
+          ];
           text = ''
             "$(home-manager generations | head -2 | tail -1 | rg -o '/[^ ]*')"/activate
           '';
@@ -91,11 +95,14 @@
       obsidian
       (writeShellApplication {
         name = "toggle-bindings";
-        runtimeInputs = with pkgs; [ home-manager coreutils ripgrep ];
-        text =
-          ''
-            "$(home-manager generations | head -1 | rg -o '/[^ ]*')"/specialisation/undocked/activate
-          '';
+        runtimeInputs = with pkgs; [
+          home-manager
+          coreutils
+          ripgrep
+        ];
+        text = ''
+          "$(home-manager generations | head -1 | rg -o '/[^ ]*')"/specialisation/undocked/activate
+        '';
       })
     ];
   };

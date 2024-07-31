@@ -10,7 +10,7 @@
   options = {
     i3.enable = lib.mkEnableOption "Enables i3wm and supporting applications";
   };
-  
+
   imports = [
     ./i3_undocked.nix
     ./i3_docked.nix

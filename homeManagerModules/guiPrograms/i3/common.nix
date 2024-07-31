@@ -10,6 +10,11 @@
   options = {
     i3.enable = lib.mkEnableOption "Enables i3wm and supporting applications";
   };
+  
+  imports = [
+    ./i3_undocked.nix
+    ./i3_docked.nix
+  ];
 
   config = lib.mkIf config.i3.enable {
 
@@ -44,7 +49,7 @@
       cursorTheme.size = 24;
       theme = {
         package = pkgs.gruvbox-gtk-theme;
-        name = "Gruvbox-Dark-BL";
+        name = "Gruvbox-Dark";
       };
     };
 
@@ -125,7 +130,7 @@
             notification = false;
           }
           {
-            command = "sleep 3; ${pkgs.feh}/bin/feh --bg-scale /etc/nixos/nixos/assets/background_2256x1504.jpg --no-fehbg";
+            command = "sleep 3; ${pkgs.feh}/bin/feh --bg-scale /etc/nixos/assets/background_2256x1504.jpg --no-fehbg";
             always = true;
             notification = false;
           }
@@ -140,32 +145,6 @@
             notification = false;
           }
         ];
-
-        keybindings = lib.mkOptionDefault {
-          "XF86AudioMute" = "exec amixer set Master toggle";
-          "XF86AudioLowerVolume" = "exec amixer set Master 4%-";
-          "XF86AudioRaiseVolume" = "exec amixer set Master 4%+";
-          "XF86MonBrightnessDown" = "exec xbacklight -dec 5";
-          "XF86MonBrightnessUp" = "exec xbacklight -inc 5";
-
-          # Focus
-          "${modifier}+j" = "focus left";
-          "${modifier}+k" = "focus down";
-          #"${modifier}+l" = "focus up";
-          "${modifier}+semicolon" = "focus right";
-
-          # Move
-          "${modifier}+Shift+j" = "move left";
-          "${modifier}+Shift+k" = "move down";
-          "${modifier}+Shift+l" = "move up";
-          "${modifier}+Shift+semicolon" = "move right";
-
-          "${modifier}+d" = "exec --no-startup-id rofi -show combi -modes combi -combi-modes drun#ssh#window -show-icons -combi-hide-mode-prefix";
-
-          #"${modifier}+l" = "exec betterlockscreen -l dimblur --off 120";
-          "${modifier}+l" = "exec xflock4";
-          "${modifier}+c" = ''exec --no-startup-id rofi -modi "clipboard:greenclip print" -show clipboard'';
-        };
 
         bars = [ ]; # Disable i3bar for polybar use
       };

@@ -1,7 +1,7 @@
 { ... }:
 {
   imports = [
-    ./i3.nix
+    ./i3/common.nix
     ./kitty.nix
     ./polybar.nix
     ./rofi.nix

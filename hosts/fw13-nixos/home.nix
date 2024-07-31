@@ -5,6 +5,8 @@
   outputs,
   pkgs,
   nix-colors,
+  config,
+  lib,
   ...
 }:
 
@@ -15,7 +17,8 @@
   ];
 
   # Toggleable modules defined in ../../homeManagerModules/
-  i3.enable = true;
+  i3.enable = true; # Docked/Undocked keybindings in HomeManager Specializations
+  i3.docked.enable = true;
   wezterm.enable = true;
   autorandr.enable = true;
   tmux.enable = true;
@@ -47,6 +50,22 @@
   # User-level fonts
   fonts.fontconfig.enable = true;
 
+  specialisation = {
+    undocked.configuration = {
+      i3.docked.enable = lib.mkForce false;
+      i3.undocked.enable = true;
+      home.packages = with pkgs; [
+        (hiPrio (writeShellApplication {
+          name = "toggle-bindings";
+          runtimeInputs = with pkgs; [ home-manager coreutils ripgrep ];
+          text = ''
+            "$(home-manager generations | head -2 | tail -1 | rg -o '/[^ ]*')"/activate
+          '';
+        }))
+      ];
+    };
+  };
+
   home = {
     username = "dap";
     homeDirectory = "/home/dap";
@@ -70,6 +89,14 @@
       gnupg
       nvim-pkg
       obsidian
+      (writeShellApplication {
+        name = "toggle-bindings";
+        runtimeInputs = with pkgs; [ home-manager coreutils ripgrep ];
+        text =
+          ''
+            "$(home-manager generations | head -1 | rg -o '/[^ ]*')"/specialisation/undocked/activate
+          '';
+      })
     ];
   };
 

@@ -8,10 +8,10 @@
 {
 
   options = {
-    i3.docked.enable = lib.mkEnableOption "Enables i3wm docked keybindings";
+    i3.colemak.enable = lib.mkEnableOption "Enables i3wm colemak (docked) keybindings";
   };
 
-  config = lib.mkIf config.i3.docked.enable {
+  config = lib.mkIf config.i3.colemak.enable {
 
     xsession.windowManager.i3 = {
       config = rec {
@@ -34,6 +34,10 @@
           "${modifier}+Shift+e" = "move down";
           "${modifier}+Shift+i" = "move up";
           "${modifier}+Shift+o" = "move right";
+
+          #Layout
+          "${modifier}+s" = "layout toggle splith tabbed";
+          "${modifier}+t" = "fullscreen toggle";
 
           # Workspaces
           "${modifier}+q" = "workspace number 1";

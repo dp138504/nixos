@@ -12,8 +12,8 @@
   };
 
   imports = [
-    ./i3_undocked.nix
-    ./i3_docked.nix
+    ./i3_qwerty.nix
+    ./i3_colemak.nix
   ];
 
   config = lib.mkIf config.i3.enable {

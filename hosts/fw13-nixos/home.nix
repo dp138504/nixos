@@ -18,7 +18,7 @@
 
   # Toggleable modules defined in ../../homeManagerModules/
   i3.enable = true; # Docked/Undocked keybindings in HomeManager Specializations
-  i3.docked.enable = true;
+  i3.colemak.enable = true;
   wezterm.enable = true;
   autorandr.enable = true;
   tmux.enable = true;
@@ -52,8 +52,8 @@
 
   specialisation = {
     undocked.configuration = {
-      i3.docked.enable = lib.mkForce false;
-      i3.undocked.enable = true;
+      i3.colemak.enable = lib.mkForce false;
+      i3.qwerty.enable = true;
       home.packages = with pkgs; [
         (hiPrio (writeShellApplication {
           name = "toggle-bindings";

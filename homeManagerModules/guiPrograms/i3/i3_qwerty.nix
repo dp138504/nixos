@@ -8,10 +8,10 @@
 {
 
   options = {
-    i3.undocked.enable = lib.mkEnableOption "Enables i3wm undocked keybindings";
+    i3.qwerty.enable = lib.mkEnableOption "Enables i3wm qwerty (undocked) keybindings";
   };
 
-  config = lib.mkIf config.i3.undocked.enable {
+  config = lib.mkIf config.i3.qwerty.enable {
 
     xsession.windowManager.i3 = {
       config = rec {

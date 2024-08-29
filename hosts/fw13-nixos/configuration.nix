@@ -16,6 +16,16 @@
     ./hardware-configuration.nix # Include the results of the hardware scan.
   ];
 
+  # System-level profiles. Implemented as NixOS modules.
+  profiles = {
+    virtualization.enable = true; # Enables virtualization technologies: docker & qemu/kvm
+    common.enable = true; # Sets common system settings: nix tweaks, i18n, etc.
+    bootloader = {
+      enable = true; # Bootloader defaults.
+      graphical = true; # Enable plymouth graphical boot process.
+    };
+  };
+
   nixpkgs = {
     config.allowUnfree = true;
     overlays = [
@@ -24,46 +34,12 @@
       outputs.overlays.unstable-packages
     ];
   };
-  nix = {
-    # This will add each flake input as a registry
-    # To make nix3 commands consistent with your flake
-    registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
 
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nixPath = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
-
-    settings = {
-      # Enable flakes and new 'nix' command
-      experimental-features = "nix-command flakes";
-      # Deduplicate and optimize nix store
-      auto-optimise-store = true;
-    };
-  };
-
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 5;
+  # Bootloader extras.
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [
     "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
   ];
-  boot.plymouth = {
-    enable = true; # Graphical boot
-    themePackages = [
-      (pkgs.adi1090x-plymouth-themes.override {
-        selected_themes = [
-          "angular"
-          "angular_alt"
-          "connect"
-          "deus_ex"
-          "green_blocks"
-          "hexagon_dots_alt"
-        ];
-      })
-    ];
-    theme = "hexagon_dots_alt";
-  };
 
   networking.hostName = "fw13-nixos"; # Define your hostname.
 
@@ -75,36 +51,6 @@
     enableStrongSwan = true;
   };
 
-  time.timeZone = "America/New_York";
-
-  i18n.defaultLocale = "en_US.UTF-8";
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  virtualisation.docker.rootless = {
-    enable = true;
-    setSocketVariable = true;
-  };
-
-  virtualisation.libvirtd.enable = true;
-  virtualisation.libvirtd.qemu = {
-    runAsRoot = true;
-    ovmf = {
-      packages = [ pkgs.OVMFFull.fd ];
-      enable = true;
-    };
-  };
-  programs.virt-manager.enable = true;
-
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
   security.pki.certificateFiles = [
@@ -113,10 +59,16 @@
     ../../assets/dod_certificates.pem
   ];
   services.pcscd.enable = true; # Smartcard daemon
-  services.udev.packages = with pkgs; [ yubikey-personalization ];
+  services.udev.packages = with pkgs; [ 
+    yubikey-personalization
+    platformio-core
+    openocd
+  ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
+
+  services.desktopManager.cosmic.enable = false;
 
   # Enable and configure the X11 windowing system.
   services.xserver = {
@@ -149,6 +101,7 @@
 
   services.displayManager = {
     defaultSession = "xfce+i3";
+    cosmic-greeter.enable = false;
     sddm.enable = true;
     sddm.settings = {
       X11 = {
@@ -180,8 +133,6 @@
   environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
   '';
-
-  environment.etc.hosts.mode = "0644";
 
   services.fwupd.enable = true; # Firmware updates
   services.hardware.bolt.enable = true; # Thunderbolt daemon
@@ -279,7 +230,14 @@
     open = true; # Not working with false (Getting RmInitAdapter failed which could be a bios bug)
     nvidiaSettings = true; # Nvidia Xorg Settings tool
     forceFullCompositionPipeline = true; # Helps with screen tearing
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+      version = "555.58.02";
+      sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
+      sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
+      openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
+      settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
+      persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
+    };
 
     prime = {
       sync.enable = true;

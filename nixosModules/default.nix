@@ -1,4 +1,7 @@
 { ... }:
 {
-  imports = [ ];
+  imports = [ 
+    ./cliPrograms
+    ./guiPrograms
+  ];
 }

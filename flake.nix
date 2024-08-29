@@ -24,6 +24,11 @@
       url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nixos-cosmic = {
+      url = "github:lilyinstarlight/nixos-cosmic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -35,6 +40,7 @@
       nix-colors,
       kickstart-nix-nvim,
       sddm-surgar-candy-nix,
+      nixos-cosmic,
       ...
     }@inputs:
     let
@@ -58,6 +64,13 @@
             hardware.nixosModules.framework-13th-gen-intel
             hardware.nixosModules.common-gpu-nvidia-nonprime
             sddm-surgar-candy-nix.nixosModules.default
+            {
+              nix.settings = {
+                substituters = [ "https://cosmic.cachix.org/" ];
+                trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
+              };
+            }
+            nixos-cosmic.nixosModules.default
           ];
         };
       };
@@ -73,6 +86,7 @@
           modules = [
             ./hosts/fw13-nixos/home.nix
             ./homeManagerModules
+            ./nixosModules
           ];
         };
         "dap" = home-manager.lib.homeManagerConfiguration {

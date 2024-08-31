@@ -60,7 +60,7 @@
           };
           modules = [
             ./hosts/fw13-nixos/configuration.nix
-            ./nixosModules
+            ./modules/nixos
             hardware.nixosModules.framework-13th-gen-intel
             hardware.nixosModules.common-gpu-nvidia-nonprime
             sddm-surgar-candy-nix.nixosModules.default
@@ -85,8 +85,7 @@
           };
           modules = [
             ./hosts/fw13-nixos/home.nix
-            ./homeManagerModules
-            ./nixosModules
+            ./modules/home-manager
           ];
         };
         "dap" = home-manager.lib.homeManagerConfiguration {
@@ -97,7 +96,7 @@
           };
           modules = [
             ./hosts/fw13-kali/home.nix
-            ./homeManagerModules
+            ./modules/home-manager
           ];
         };
         "dap@dylan-acenet" = home-manager.lib.homeManagerConfiguration {
@@ -108,7 +107,7 @@
           };
           modules = [
             ./hosts/dylan-acenet/home.nix
-            ./homeManagerModules
+            ./modules/home-manager
           ];
         };
       };

@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   cfg = config.profiles.virtualization;
 in
@@ -26,7 +31,7 @@ in
     };
 
     virtualisation.libvirtd = lib.mkIf (cfg.qemu_kvm) {
-    enable = true;
+      enable = true;
       qemu = {
         runAsRoot = true;
         ovmf = {

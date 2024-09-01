@@ -39,7 +39,8 @@ in
         enable = true;
         configurationLimit = 5;
       };
-      grub = lib.mkIf (cfg.grub) { # TODO: Actually test this
+      grub = lib.mkIf (cfg.grub) {
+        # TODO: Actually test this
         enable = true;
       };
     };

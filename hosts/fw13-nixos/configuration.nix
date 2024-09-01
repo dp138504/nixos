@@ -59,7 +59,7 @@
     ../../assets/dod_certificates.pem
   ];
   services.pcscd.enable = true; # Smartcard daemon
-  services.udev.packages = with pkgs; [ 
+  services.udev.packages = with pkgs; [
     yubikey-personalization
     platformio-core
     openocd

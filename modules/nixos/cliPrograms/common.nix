@@ -47,10 +47,10 @@ in
       LC_TELEPHONE = "en_US.UTF-8";
       LC_TIME = "en_US.UTF-8";
     };
-   
+
     # East-coast TZ
     time.timeZone = "America/New_York";
-    
+
     # Allow /etc/hosts to be writable for on-the-fly edits
     environment.etc.hosts.mode = "0644";
 

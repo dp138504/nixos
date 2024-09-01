@@ -4,11 +4,13 @@
   lib,
   ...
 }:
-
+let
+  cfg = config.profiles.home.i3;
+in
 {
 
   options = {
-    i3.enable = lib.mkEnableOption "Enables i3wm and supporting applications";
+    profiles.home.i3.enable = lib.mkEnableOption "Enables i3wm and supporting applications";
   };
 
   imports = [
@@ -16,7 +18,7 @@
     ./i3_colemak.nix
   ];
 
-  config = lib.mkIf config.i3.enable {
+  config = lib.mkIf cfg.enable {
 
     ######################################
     ## Supporting applications for i3wm ##

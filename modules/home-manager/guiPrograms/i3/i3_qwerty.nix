@@ -4,14 +4,16 @@
   lib,
   ...
 }:
-
+let
+  cfg = config.profiles.home.i3;
+in
 {
 
   options = {
-    i3.qwerty.enable = lib.mkEnableOption "Enables i3wm qwerty (undocked) keybindings";
+    profiles.home.i3.qwerty = lib.mkEnableOption "Enables i3wm qwerty (undocked) keybindings";
   };
 
-  config = lib.mkIf config.i3.qwerty.enable {
+  config = lib.mkIf cfg.qwerty {
 
     xsession.windowManager.i3 = {
       config = rec {

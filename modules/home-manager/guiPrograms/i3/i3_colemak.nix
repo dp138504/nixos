@@ -4,14 +4,16 @@
   lib,
   ...
 }:
-
+let
+  cfg = config.profiles.home.i3;
+in
 {
 
   options = {
-    i3.colemak.enable = lib.mkEnableOption "Enables i3wm colemak (docked) keybindings";
+    profiles.home.i3.colemak = lib.mkEnableOption "Enables i3wm colemak (docked) keybindings";
   };
 
-  config = lib.mkIf config.i3.colemak.enable {
+  config = lib.mkIf cfg.colemak {
 
     xsession.windowManager.i3 = {
       config = rec {

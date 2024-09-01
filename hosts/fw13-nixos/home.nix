@@ -16,14 +16,19 @@
     inputs.nix-colors.homeManagerModule
   ];
 
-  # Toggleable modules defined in ../../homeManagerModules/
-  i3.enable = true; # Docked/Undocked keybindings in HomeManager Specializations
-  i3.colemak.enable = true;
-  wezterm.enable = true;
-  autorandr.enable = true;
-  tmux.enable = true;
-  zsh.enable = true; # System specific aliases defined below
-  texlive.enable = true;
+  # Toggleable modules defined in ../../modules/home-manager/
+  profiles.home = {
+    wezterm.enable = true; # Enable wezterm settings
+    tmux.enable = true; # Enable tmux settings
+    texlive.enable = true; # Enable TeXLive distribution
+    zsh.enable = true; # Enable Z-shell customizations
+    autorandr.enable = true; # Enables autorandr of connected monitors
+    i3 = {
+      enable = true; # Enable i3wm and supporting applications
+      colemak = true; # Colemak keybindings when docked
+    };
+  };
+
 
   nixpkgs = {
     overlays = [
@@ -52,8 +57,10 @@
 
   specialisation = {
     undocked.configuration = {
-      i3.colemak.enable = lib.mkForce false;
-      i3.qwerty.enable = true;
+      profiles.home.i3 = {
+        colemak = lib.mkForce false;
+        qwerty = true;
+      };
       home.packages = with pkgs; [
         (hiPrio (writeShellApplication {
           name = "toggle-bindings";
@@ -93,6 +100,7 @@
       gnupg
       nvim-pkg
       obsidian
+      inputs.zen-browser.packages."${system}".default
       (writeShellApplication {
         name = "toggle-bindings";
         runtimeInputs = with pkgs; [

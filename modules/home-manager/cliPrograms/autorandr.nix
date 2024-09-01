@@ -1,12 +1,14 @@
 { lib, config, ... }:
-
+let
+  cfg = config.profiles.home.autorandr;
+in
 {
 
   options = {
-    autorandr.enable = lib.mkEnableOption "Enables autorandr";
+    profiles.home.autorandr.enable = lib.mkEnableOption "Enables autorandr";
   };
 
-  config = lib.mkIf config.autorandr.enable {
+  config = lib.mkIf cfg.enable {
     programs.autorandr = {
       enable = true;
       profiles = {

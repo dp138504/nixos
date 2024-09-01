@@ -4,13 +4,16 @@
   pkgs,
   ...
 }:
+let
+  cfg = config.profiles.home.tmux;
+in
 {
 
   options = {
-    tmux.enable = lib.mkEnableOption "Enables tmux";
+    profiles.home.tmux.enable = lib.mkEnableOption "Enables tmux";
   };
 
-  config = lib.mkIf config.tmux.enable {
+  config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
       terminal = "tmux-256color";

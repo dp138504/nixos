@@ -1,11 +1,14 @@
 { config, lib, ... }:
+let
+  cfg = config.profiles.home.wezterm;
+in
 {
 
   options = {
-    wezterm.enable = lib.mkEnableOption "Fnables wezterm";
+    profiles.home.wezterm.enable = lib.mkEnableOption "Enables wezterm";
   };
 
-  config = lib.mkIf config.wezterm.enable {
+  config = lib.mkIf cfg.enable {
     programs.wezterm = {
       enable = true;
 

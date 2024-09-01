@@ -1,11 +1,14 @@
 { lib, config, ... }:
+let
+  cfg = config.profiles.home;
+in
 {
 
   options = {
-    zsh.enable = lib.mkEnableOption "Enables zsh customization";
+    profiles.home.zsh.enable = lib.mkEnableOption "Enables zsh customization";
   };
 
-  config = lib.mkIf config.zsh.enable {
+  config = lib.mkIf cfg.zsh.enable {
     programs.zsh = {
       enable = true;
       autosuggestion.enable = true;
@@ -19,7 +22,7 @@
           "sudo"
         ];
       };
-      envExtra = lib.mkIf config.tmux.enable ''
+      envExtra = lib.mkIf cfg.tmux.enable ''
         if [ -x "$(command -v tmux)" ] && [ -n "''${DISPLAY}" ] && [ -z "''${TMUX}" ]; then
           exec tmux new-session -A -s ''${USER} >/dev/null 2>&1
         fi

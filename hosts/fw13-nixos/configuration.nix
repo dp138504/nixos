@@ -35,6 +35,16 @@
     ];
   };
 
+  sops = {
+    defaultSopsFile = ../../secrets/personal/secrets.yaml;
+    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+    gnupg.home = "../../.git/gnupg";
+    secrets = {
+      "intermediate_ca.pem" = {  };
+      "root_ca.pem" = {  };
+    };
+  };
+
   # Bootloader extras.
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelParams = [
@@ -54,8 +64,6 @@
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
   security.pki.certificateFiles = [
-    ../../assets/root_ca.pem
-    ../../assets/intermediate_ca.pem
     ../../assets/dod_certificates.pem
   ];
   services.pcscd.enable = true; # Smartcard daemon
@@ -175,6 +183,8 @@
     fprintd # Fingerprint reader daemon
     powertop # Power management monitor
     git # SCM
+    sops # secrets operations
+    git-agecrypt
     gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
     gnome.seahorse # Gnome keyring management
     (pkgs.writeShellScriptBin "setup-browser-cac" ''

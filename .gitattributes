@@ -1,0 +1,2 @@
+assets/intermediate_ca.pem filter=git-agecrypt diff=git-agecrypt
+assets/root_ca.pem filter=git-agecrypt diff=git-agecrypt

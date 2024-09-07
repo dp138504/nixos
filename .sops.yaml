@@ -1,0 +1,17 @@
+keys:
+  - &user_dap E271304E9C75C0322217A6F353EEC3BF20E7A331
+  - &host_fw13-nixos age13q0ddjk75hhs5dnx2n6uz3caj8fuepxx0zn0943yl26tr722dsdsvppkf6
+  - &host_dylan-acenet
+creation_rules:
+  - path_regex: secrets/personal/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - pgp:
+      - *user_dap
+      age:
+      - *host_fw13-nixos
+  - path_regex: secrets/work/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+    - pgp:
+      - *user_dap
+      age:
+      - *host_dylan-acenet

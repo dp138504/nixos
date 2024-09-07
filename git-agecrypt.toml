@@ -1,0 +1,3 @@
+[config]
+"assets/root_ca.pem" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBtDTi0vFNLsDIhq1sA3irjaDcBTX2qInHh4cncSJSTt root@fw13-nixos"]
+"assets/intermediate_ca.pem" = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBtDTi0vFNLsDIhq1sA3irjaDcBTX2qInHh4cncSJSTt root@fw13-nixos"]

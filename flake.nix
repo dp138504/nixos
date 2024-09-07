@@ -31,6 +31,12 @@
     };
 
     zen-browser.url = "github:MarceColl/zen-browser-flake";
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
   outputs =
@@ -43,6 +49,7 @@
       kickstart-nix-nvim,
       sddm-surgar-candy-nix,
       nixos-cosmic,
+      sops-nix,
       ...
     }@inputs:
     let
@@ -65,6 +72,7 @@
             ./modules/nixos
             hardware.nixosModules.framework-13th-gen-intel
             hardware.nixosModules.common-gpu-nvidia-nonprime
+            sops-nix.nixosModules.sops
             sddm-surgar-candy-nix.nixosModules.default
             {
               nix.settings = {

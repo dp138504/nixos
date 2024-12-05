@@ -46,7 +46,7 @@ in
     gtk = {
       enable = true;
       iconTheme.name = "Gruvbox-Plus-Dark";
-      cursorTheme.package = pkgs.gnome.adwaita-icon-theme;
+      cursorTheme.package = pkgs.adwaita-icon-theme;
       cursorTheme.name = "Adwaita";
       cursorTheme.size = 24;
       theme = {

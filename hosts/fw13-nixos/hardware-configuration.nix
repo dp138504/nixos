@@ -12,7 +12,7 @@
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+#  boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.initrd.availableKernelModules = with config.boot.kernelPackages; [
     "xhci_pci"
     "thunderbolt"

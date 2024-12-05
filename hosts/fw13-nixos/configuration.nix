@@ -136,7 +136,7 @@
     # '';
   };
 
-  environment.budgie.excludePackages = with pkgs; [ cinnamon.nemo ];
+  environment.budgie.excludePackages = with pkgs; [ nemo ];
 
   environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
@@ -152,7 +152,6 @@
   };
 
   # Enable sound with pipewire.
-  sound.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -186,7 +185,7 @@
     sops # secrets operations
     git-agecrypt
     gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
-    gnome.seahorse # Gnome keyring management
+    seahorse # Gnome keyring management
     (pkgs.writeShellScriptBin "setup-browser-cac" ''
       NSSDB="''${HOME}/.pki/nssdb"
       mkdir -p ''${NSSDB}
@@ -220,10 +219,9 @@
     enableSSHSupport = true;
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   services.blueman.enable = true;
@@ -240,14 +238,14 @@
     open = true; # Not working with false (Getting RmInitAdapter failed which could be a bios bug)
     nvidiaSettings = true; # Nvidia Xorg Settings tool
     forceFullCompositionPipeline = true; # Helps with screen tearing
-    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      version = "555.58.02";
-      sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-      sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
-      openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
-      settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-      persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
-    };
+#    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+#      version = "555.58.02";
+#      sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
+#      sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
+#      openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
+#      settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
+#      persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
+#    };
 
     prime = {
       sync.enable = true;

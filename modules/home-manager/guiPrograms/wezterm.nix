@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ inputs, pkgs, config, lib, ... }:
 let
   cfg = config.profiles.home.wezterm;
 in
@@ -11,6 +11,8 @@ in
   config = lib.mkIf cfg.enable {
     programs.wezterm = {
       enable = true;
+
+      package = inputs.wezterm.packages."${pkgs.system}".default;
 
       colorSchemes.nix-colors = {
         ansi = [

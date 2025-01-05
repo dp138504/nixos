@@ -35,15 +35,15 @@
     ];
   };
 
-  sops = {
-    defaultSopsFile = ../../secrets/personal/secrets.yaml;
-    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
-    gnupg.home = "../../.git/gnupg";
-    secrets = {
-      "intermediate_ca.pem" = {  };
-      "root_ca.pem" = {  };
-    };
-  };
+#  sops = {
+#    defaultSopsFile = ../../secrets/personal/secrets.yaml;
+#    age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
+#    gnupg.home = "../../.git/gnupg";
+#    secrets = {
+#      "intermediate_ca.pem" = {  };
+#      "root_ca.pem" = {  };
+#    };
+#  };
 
   # Bootloader extras.
   boot.loader.efi.canTouchEfiVariables = true;

@@ -61,7 +61,6 @@
     enableStrongSwan = true;
   };
 
-  #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
   security.pam.services.hyprlock = {};
   security.pki.certificateFiles = [
@@ -89,46 +88,15 @@
 
   # Enable and configure the X11 windowing system.
   services.xserver = {
-#    enable = true;
-#    exportConfiguration = true;
     videoDrivers = [ "nvidia" ];
-#    # Set keyboard layout
-#    xkb.layout = "us";
-#    xkb.variant = "";
-#
-#    desktopManager = {
-#      xterm.enable = false;
-#      budgie = {
-#        enable = true;
-#      }; # Default Desktop Environment
-#      xfce = {
-#        enable = true;
-#        noDesktop = true;
-#        enableXfwm = false;
-#        enableScreensaver = true;
-#      };
-#    };
-#
-#    windowManager.i3 = {
-#      enable = true;
-#      package = pkgs.i3-gaps;
-#      extraPackages = with pkgs; [ i3lock-color ];
-#    };
   };
 
   services.displayManager = {
     defaultSession = "plasma";
     sddm = {
       enable = true;
-#      package = lib.mkForce pkgs.libsForQt5.sddm;
-#      extraPackages = lib.mkForce [ pkgs.libsForQt5.qt5.qtgraphicaleffects ];
       wayland.enable = true;
     };
-#    sddm.settings = {
-#      X11 = {
-#        DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
-#      };
-#    };
     sddm.sugarCandyNix = {
       enable = false;
       settings = {
@@ -144,12 +112,7 @@
         Font = "JetBrainsMono Nerd Font Mono";
       };
     };
-    # setupCommands = lib.mkAfter ''
-    #   ${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)
-    # '';
   };
-
-#  environment.budgie.excludePackages = with pkgs; [ nemo ];
 
   environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
@@ -198,7 +161,6 @@
     git # SCM
     sops # secrets operations
     git-agecrypt
-    gruvbox-plus-icons-pack # Gruvbox Icons (custom derivation from ../pkgs/)
     seahorse # Gnome keyring management
     (pkgs.writeShellScriptBin "setup-browser-cac" ''
       NSSDB="''${HOME}/.pki/nssdb"
@@ -254,14 +216,6 @@
     open = true; # Not working with false (Getting RmInitAdapter failed which could be a bios bug)
     nvidiaSettings = true; # Nvidia Xorg Settings tool
     forceFullCompositionPipeline = true; # Helps with screen tearing
-#    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-#      version = "555.58.02";
-#      sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-#      sha256_aarch64 = "sha256-wb20isMrRg8PeQBU96lWJzBMkjfySAUaqt4EgZnhyF8=";
-#      openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
-#      settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-#      persistencedSha256 = "sha256-a1D7ZZmcKFWfPjjH1REqPM5j/YLWKnbkP9qfRyIyxAw=";
-#    };
 
     prime = {
       sync.enable = true;

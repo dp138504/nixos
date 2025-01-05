@@ -87,7 +87,6 @@
       nixfmt-rfc-style
       bitwarden
       tmux
-      #unstable.vivaldi
       tree
       slack
       haskellPackages.greenclip # Rofi clipboard manager

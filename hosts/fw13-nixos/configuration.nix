@@ -179,6 +179,7 @@
     isNormalUser = true;
     description = "Dylan A Pitts";
     extraGroups = [
+      "plugdev"
       "networkmanager"
       "wheel"
       "video"
@@ -236,6 +237,8 @@
     enable = true;
     enable32Bit = true;
   };
+
+  hardware.rtl-sdr.enable = true;
 
   services.blueman.enable = true;
   hardware.bluetooth = {

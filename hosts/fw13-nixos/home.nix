@@ -14,6 +14,7 @@
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
     inputs.nix-colors.homeManagerModule
+    ../../modules/home-manager/services/stylix.nix
   ];
 
   # Toggleable modules defined in ../../modules/home-manager/
@@ -22,9 +23,10 @@
     tmux.enable = true; # Enable tmux settings
     texlive.enable = true; # Enable TeXLive distribution
     zsh.enable = true; # Enable Z-shell customizations
-    autorandr.enable = true; # Enables autorandr of connected monitors
+    autorandr.enable = false; # Enables autorandr of connected monitors
+    hyprland.enable = true; # Enable hyprland and supporting applications
     i3 = {
-      enable = true; # Enable i3wm and supporting applications
+      enable = false; # Enable i3wm and supporting applications
       colemak = true; # Colemak keybindings when docked
     };
   };
@@ -81,10 +83,11 @@
     homeDirectory = "/home/dap";
     packages = with pkgs; [
       (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+      ytmdesktop
       nixfmt-rfc-style
       bitwarden
       tmux
-      unstable.vivaldi
+      #unstable.vivaldi
       tree
       slack
       haskellPackages.greenclip # Rofi clipboard manager
@@ -98,6 +101,7 @@
       super-slicer-latest
       gnupg
       nvim-pkg
+      galculator
       obsidian
       inputs.zen-browser.packages."${system}".default
       (writeShellApplication {

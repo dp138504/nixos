@@ -16,22 +16,27 @@
     # NixColors
     nix-colors.url = "github:misterio77/nix-colors";
 
+    # Stylix
+    stylix.url = "github:danth/stylix/release-24.11";
+
     # Neovim configuration
     kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
     #kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
 
+    # Customizable SDDM theming
     sddm-surgar-candy-nix = {
       url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # System76's Cosmic DE
     nixos-cosmic = {
       url = "github:lilyinstarlight/nixos-cosmic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     zen-browser.url = "github:MarceColl/zen-browser-flake";
-
+   
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -55,6 +60,7 @@
       sddm-surgar-candy-nix,
       nixos-cosmic,
       sops-nix,
+      stylix,
       ...
     }@inputs:
     let
@@ -79,10 +85,15 @@
             hardware.nixosModules.common-gpu-nvidia-nonprime
             sops-nix.nixosModules.sops
             sddm-surgar-candy-nix.nixosModules.default
+            stylix.nixosModules.stylix
             {
               nix.settings = {
-                substituters = [ "https://cosmic.cachix.org/" ];
-                trusted-public-keys = [ "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE=" ];
+                substituters = [ 
+                  "https://cosmic.cachix.org/"
+                ];
+                trusted-public-keys = [ 
+                  "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+                ];
               };
             }
             nixos-cosmic.nixosModules.default
@@ -99,6 +110,7 @@
             inherit inputs outputs nix-colors;
           };
           modules = [
+            stylix.homeManagerModules.stylix
             ./hosts/fw13-nixos/home.nix
             ./modules/home-manager
           ];

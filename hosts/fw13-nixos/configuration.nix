@@ -63,6 +63,7 @@
 
   #security.pam.services.lightdm.enableGnomeKeyring = true;
   security.pam.services.sddm.enableGnomeKeyring = true;
+  security.pam.services.hyprlock = {};
   security.pki.certificateFiles = [
     ../../assets/dod_certificates.pem
   ];
@@ -76,48 +77,60 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
-  services.desktopManager.cosmic.enable = false;
+  services.desktopManager = {
+    plasma6.enable = true;
+    cosmic.enable = true;
+  };
+
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
 
   # Enable and configure the X11 windowing system.
   services.xserver = {
-    enable = true;
-    exportConfiguration = true;
+#    enable = true;
+#    exportConfiguration = true;
     videoDrivers = [ "nvidia" ];
-    # Set keyboard layout
-    xkb.layout = "us";
-    xkb.variant = "";
-
-    desktopManager = {
-      xterm.enable = false;
-      budgie = {
-        enable = true;
-      }; # Default Desktop Environment
-      xfce = {
-        enable = true;
-        noDesktop = true;
-        enableXfwm = false;
-        enableScreensaver = true;
-      };
-    };
-
-    windowManager.i3 = {
-      enable = true;
-      package = pkgs.i3-gaps;
-      extraPackages = with pkgs; [ i3lock-color ];
-    };
+#    # Set keyboard layout
+#    xkb.layout = "us";
+#    xkb.variant = "";
+#
+#    desktopManager = {
+#      xterm.enable = false;
+#      budgie = {
+#        enable = true;
+#      }; # Default Desktop Environment
+#      xfce = {
+#        enable = true;
+#        noDesktop = true;
+#        enableXfwm = false;
+#        enableScreensaver = true;
+#      };
+#    };
+#
+#    windowManager.i3 = {
+#      enable = true;
+#      package = pkgs.i3-gaps;
+#      extraPackages = with pkgs; [ i3lock-color ];
+#    };
   };
 
   services.displayManager = {
-    defaultSession = "xfce+i3";
-    cosmic-greeter.enable = false;
-    sddm.enable = true;
-    sddm.settings = {
-      X11 = {
-        DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
-      };
-    };
-    sddm.sugarCandyNix = {
+    defaultSession = "plasma";
+    sddm = {
       enable = true;
+#      package = lib.mkForce pkgs.libsForQt5.sddm;
+#      extraPackages = lib.mkForce [ pkgs.libsForQt5.qt5.qtgraphicaleffects ];
+      wayland.enable = true;
+    };
+#    sddm.settings = {
+#      X11 = {
+#        DisplayCommand = "${pkgs.autorandr}/bin/autorandr --load $(${pkgs.autorandr}/bin/autorandr --detected)";
+#      };
+#    };
+    sddm.sugarCandyNix = {
+      enable = false;
       settings = {
         Background = lib.cleanSource ../../assets/background_2256x1504.jpg;
         ScreenWidth = 2256;
@@ -136,7 +149,7 @@
     # '';
   };
 
-  environment.budgie.excludePackages = with pkgs; [ nemo ];
+#  environment.budgie.excludePackages = with pkgs; [ nemo ];
 
   environment.etc."pkcs11/modules/opensc-pkcs11".text = ''
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
@@ -198,19 +211,19 @@
 
   # Power management
   powerManagement.powertop.enable = true; # View power usage
-  services.tlp = {
-    # Laptop power saving utility
-    enable = true;
-    settings = {
-      PCIE_ASPM_ON_BAT = "powersupersave";
-      PCIE_ASPM_ON_AC = "on"; # Force PCIe (i.e. eGPU) devices to "on" when on external power
-    };
-  };
+#  services.tlp = {
+#    # Laptop power saving utility
+#    enable = true;
+#    settings = {
+#      PCIE_ASPM_ON_BAT = "powersupersave";
+#      PCIE_ASPM_ON_AC = "on"; # Force PCIe (i.e. eGPU) devices to "on" when on external power
+#    };
+#  };
 
-  #  services.logind = {
-  #    lidSwitch = "ignore";
-  #    lidSwitchExternalPower = "ignore";
-  #  };
+    services.logind = {
+      lidSwitch = "ignore";
+      lidSwitchExternalPower = "ignore";
+    };
 
   programs.zsh.enable = true;
   programs.xfconf.enable = true;

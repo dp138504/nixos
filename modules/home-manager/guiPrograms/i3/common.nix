@@ -38,7 +38,22 @@ in
       enable = true;
       vSync = true;
     };
-
+    
+    home.packages = with pkgs; [
+      xclip # Copy to clipboard for X11
+      (writeShellApplication { # Toggleable i3 bindings.
+        name = "toggle-bindings";
+        runtimeInputs = with pkgs; [
+          home-manager
+          coreutils
+          ripgrep
+        ];
+        text = ''
+          "$(home-manager generations | head -1 | rg -o '/[^ ]*')"/specialisation/undocked/activate
+        '';
+      })
+    ];
+    
     ## Lightweight image viewer/background setter ##
     programs.feh.enable = true;
 

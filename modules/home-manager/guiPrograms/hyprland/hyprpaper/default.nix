@@ -18,13 +18,14 @@ lib,
         splash = false;
 
         preload = [
-          "/etc/nixos/assets/background_2256x1504.jpg"
+          "/etc/nixos/assets/stanislausnationalforest_left.jpg"
+          "/etc/nixos/assets/stanislausnationalforest_right.jpg"
         ];
 
         wallpaper = [
-        "DP-6,/etc/nixos/assets/background_2256x1504.jpg"
-        "DP-7,/etc/nixos/assets/background_2256x1504.jpg"
-        "eDP-1,/etc/nixos/assets/background_2256x1504.jpg"
+        "DP-6,/etc/nixos/assets/stanislausnationalforest_left.jpg"
+        "HDMI-A-1,/etc/nixos/assets/stanislausnationalforest_right.jpg"
+        "eDP-1,/etc/nixos/assets/stanislausnationalforest_right.jpg"
         ];
       };
     };

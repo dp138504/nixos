@@ -6,6 +6,7 @@
 }:
 let
   cfg = config.profiles.virtualization;
+  users = config.profiles.virtualization.addToGroup;
 in
 {
   options = {
@@ -21,6 +22,11 @@ in
         description = "Enable qemu/kvm virtualization";
         default = true;
       };
+      addToGroup = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        description = "List of users to add to the libvirtd group.";
+        default = [];
+      };
     };
   };
 
@@ -30,16 +36,21 @@ in
       setSocketVariable = true;
     };
 
-    virtualisation.libvirtd = lib.mkIf (cfg.qemu_kvm) {
-      enable = true;
-      qemu = {
-        runAsRoot = true;
-        ovmf = {
-          packages = [ pkgs.OVMFFull.fd ];
-          enable = true;
+    virtualisation = {
+      libvirtd = lib.mkIf (cfg.qemu_kvm) {
+        enable = true;
+        qemu = {
+          runAsRoot = true;
+          ovmf = {
+            packages = [ pkgs.OVMFFull.fd ];
+            enable = true;
+          };
         };
       };
+      spiceUSBRedirection.enable = lib.mkIf (cfg.qemu_kvm) true;
     };
+
+    users.groups.libvirtd.members = lib.mkIf (cfg.qemu_kvm) users;
 
     programs.virt-manager.enable = lib.mkIf (cfg.qemu_kvm) true;
   };

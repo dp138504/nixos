@@ -1,4 +1,4 @@
-{ lib, config, ... }:
+{ lib, config, pkgs, ... }:
 let
   cfg = config.profiles.home;
 in
@@ -26,6 +26,13 @@ in
         if [ -x "$(command -v tmux)" ] && [ -n "''${DISPLAY}" ] && [ -z "''${TMUX}" ]; then
           exec tmux new-session -A -s ''${USER} >/dev/null 2>&1
         fi
+      '';
+      initExtra = lib.mkIf cfg.tmux.enable ''
+        tmux-window-name() {
+          (${pkgs.additionalTmuxPlugins.tmux-window-name}/share/tmux-plugins/tmux-window-name/scripts/rename_session_windows.py &)
+        }
+
+        add-zsh-hook chpwd tmux-window-name
       '';
     };
   };

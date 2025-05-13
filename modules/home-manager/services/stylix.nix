@@ -4,7 +4,7 @@ stylix = {
   enable = true;
   polarity = "dark";
 
-  image = ../../../assets/background_2256x1504.jpg;
+  image = ../../../assets/stanislausnationalforest_right.jpg;
 
   base16Scheme = {
     base00 = "#282828"; # Default Background
@@ -25,6 +25,7 @@ stylix = {
     base0F = "#d65d0e"; # brown
   }; 
   targets.gtk.enable = true;
+  targets.kde.enable = true;
   targets.waybar.enable = false;
 
   cursor = {

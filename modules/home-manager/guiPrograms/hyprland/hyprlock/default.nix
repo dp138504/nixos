@@ -10,6 +10,9 @@
   };
 
   config = lib.mkIf config.hyprlock.enable {
+
+    systemd.user.services.hypridle.Unit.After = lib.mkForce "graphical-session.target";
+
     programs.hyprlock = {
       enable = true;
       importantPrefixes = [
@@ -29,12 +32,14 @@
           disable_loading_bar = true;
         };
         background = {
+          monitor = "";
           blur_passes = 2;
           contrast = 1;
           brightness = 0.5;
           vibrancy = 0.2;
           vibrancy_darkness = 0.2;
         };
+        
         label = [
           {
             monitor = "";
@@ -101,18 +106,18 @@
           on-resume = "brightnessctl -r";
         }
         {
-          timeout = 300;
+          timeout = 600;
           on-timeout = "loginctl lock-session";
         }
         {
-          timeout = 330;
+          timeout = 900;
           on-timeout = "hyprctl dispatch dpms off";
           on-resume = "hyprctl dispatch dpms on";
         }
-        {
-          timeout = 1800;
-          on-timeout = "loginctl suspend";
-        }
+        #{
+        #  timeout = 1800;
+        #  on-timeout = "loginctl suspend";
+        #}
         ];
       };
     };

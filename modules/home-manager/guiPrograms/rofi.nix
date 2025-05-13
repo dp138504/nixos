@@ -14,6 +14,11 @@ in
   };
 
   config = lib.mkIf config.rofi.enable {
+
+    home.packages = with pkgs; [
+      haskellPackages.greenclip # Rofi clipboard manager
+    ];
+
     programs.rofi = {
       enable = true;
       terminal = "${pkgs.kitty}/bin/kitty";

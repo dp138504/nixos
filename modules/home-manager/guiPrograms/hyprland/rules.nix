@@ -25,9 +25,23 @@
 
       #Scratch workspace floating rule
       "float, workspace:name:special:scratch"
+
+      "float, title:Picture-in-Picture"
+      "size 880 497, title:Picture-in-Picture"
+
+      "float, title:Extension.*"
+
       "float, class:Bitwarden"
-      "float, class:YouTube Music Desktop App"
+      "move 2761 136, class:Bitwarden"
+      "size 903 737, class:Bitwarden"
+
       "float, class: galculator"
+      "move 2916 958, class:galculator"
+      "size 600 323, class:galculator"
+
+      "float, class:YouTube Music Desktop App"
+      "move 3748 75, class:YouTube Music Desktop App"
+      "size 1020 668, class: YouTube Music Desktop App"
 
       # Hide xwaylandvideobridge
       "opacity 0.0 override, class:^(xwaylandvideobridge)$"
@@ -40,6 +54,8 @@
       # Clipboard
       "float,class:(clipse)"
       "size 622 652,class:(clipse)"
+      
+      ''float, title:^Extension: \(Bitwarden Password Manager\).*''
     ];
 
   };

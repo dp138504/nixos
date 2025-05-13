@@ -40,20 +40,20 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
 
           modules-left = [
             "hyprland/workspaces"
-            "cava"
+            "hyprland/window"
           ];
 
           modules-center = [
-            "hyprland/window"
+            "clock"
           ];
 
           modules-right = [
             "mpris"
+            "cava"
+            "wireplumber"
             "idle_inhibitor"
             "group/hardware"
-            "wireplumber"
             "backlight"
-            "clock"
             "battery"
             "tray"
             "group/power"
@@ -73,7 +73,7 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
                 9
                 10
               ];
-              DP-7 = [
+              HDMI-A-1 = [
                 1
                 2
                 3
@@ -122,7 +122,8 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
             bar_delimiter = 0;
             noise_reduction = 0.77;
             input_delay = 2;
-            hide_on_silence = true;
+            sleep_timer = 5;
+            hide_on_silence = false;
             format-icons = [
               "▁"
               "▂"
@@ -139,18 +140,15 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
           };
 
           "mpris" = {
-            format = " {status_icon} {dynamic}";
+            format = " {status_icon}  {title} - {artist}";
             interval = 1;
-            dynamic-len = 40;
+            title-len = 20;
+            artist-len = 10;
             status-icons = {
-              playing = "▶";
-              paused = "⏸";
-              stopped = "";
+              playing = "";
+              paused = "";
+              stopped = "";
             };
-            dynamic-order = [
-              "title"
-              "artist"
-            ];
             ignored-players = [ "firefox" ];
           };
 
@@ -173,8 +171,10 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
           };
 
           "clock" = {
+            format = "{:%H:%M:%S}";
+            interval = 1;
             tooltip-format = "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>";
-            format-alt = "{:%Y-%m-%d}";
+            format-alt = "{:%A, %B %d, %Y (%R)}";
           };
 
           "group/hardware" = {
@@ -238,7 +238,7 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
             format = "{icon} {volume}%";
             format-bluetooth = "{icon} {volume}% ";
             format-bluetooth-muted = " {icon}";
-            format-muted = " ";
+            format-muted = " 00%";
             format-icons = {
               headphone = "";
               headset = "";

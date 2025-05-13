@@ -24,11 +24,19 @@
     texlive.enable = true; # Enable TeXLive distribution
     zsh.enable = true; # Enable Z-shell customizations
     autorandr.enable = false; # Enables autorandr of connected monitors
-    hyprland.enable = true; # Enable hyprland and supporting applications
+    hyprland = {
+      enable = true; # Enable hyprland and supporting applications
+      colemak = true; # Colemak keybindings when docked
+    };
     i3 = {
       enable = false; # Enable i3wm and supporting applications
       colemak = true; # Colemak keybindings when docked
     };
+  };
+
+  services.udiskie = {
+    enable = true;
+    automount = false;
   };
 
   nixpkgs = {
@@ -58,7 +66,7 @@
 
   specialisation = {
     undocked.configuration = {
-      profiles.home.i3 = {
+      profiles.home.hyprland = {
         colemak = lib.mkForce false;
         qwerty = true;
       };
@@ -82,41 +90,69 @@
     username = "dap";
     homeDirectory = "/home/dap";
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
-      ytmdesktop
-      nixfmt-rfc-style
-      bitwarden
-      tmux
-      tree
-      slack
-      haskellPackages.greenclip # Rofi clipboard manager
-      skypeforlinux
-      unstable.discord
-      xclip
+      ## Communications ##
+      slack # Work communications
+      skypeforlinux # Skype for video chats
+      unstable.discord # Personal commuications
+
+      ## Utilities ##
+      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) # Preferred font
+      nixfmt-rfc-style # Nix file linter
+      bitwarden # Password manager
+      tmux # Terminal multiplexer
+      tree # Directory tree visualizer
+      unzip # Unzip utility
+      nvim-pkg # Nix neovim flake
+      gnupg # PGP client
+      galculator # Calculator
+      tailscale # Tailscale Mesh VPN
+      file
+      openssl
+     
+      ## DevOps ##
+      terraform
+      packer
+      tf-summarize
+      talosctl
+      kubectl
+      kubectl-cnpg
+      kubecolor
+      kubernetes-helm
+      minio-client
+
+      ## Graphical ##
       inkscape # Vector image editor
       gimp # Raster image editor
       imagemagick # Needed for plugins in inkscape
-      unzip
-      super-slicer-latest
-      gnupg
-      nvim-pkg
-      galculator
-      obsidian
-      inputs.zen-browser.packages."${system}".default
-      (writeShellApplication {
-        name = "toggle-bindings";
-        runtimeInputs = with pkgs; [
-          home-manager
-          coreutils
-          ripgrep
-        ];
-        text = ''
-          "$(home-manager generations | head -1 | rg -o '/[^ ]*')"/specialisation/undocked/activate
-        '';
-      })
+
+      ## 3D Printing ##
+      super-slicer-latest # 3D slicing program
+      unstable.prusa-slicer
+
+      ## SDR ##
+      chirp
+      sdrangel
+
+      ## Desktop Applications ##
+      unstable.ytmdesktop # YouTube Music desktop client
+      obsidian # Notes
+      inputs.zen-browser.packages."${system}".default # Zen browser
+
     ];
     sessionVariables = {
       EDITOR = "nvim";
+    };
+  };
+
+  # Missing desktop entries
+  xdg.desktopEntries = {
+    chirp = {
+      name = "Chirp Radio Programmer";
+      genericName = "Radio Programmer";
+      exec = "chirp";
+      terminal = false;
+      categories = [ "Audio" "Utility" "HamRadio" ];
+      icon = "${pkgs.chirp}/lib/python3.12/site-packages/chirp/share/chirp.svg";
     };
   };
 
@@ -132,10 +168,15 @@
   };
 
   programs.zsh = {
+    initExtra = "compdef kubecolor=kubectl";
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos/#fw13-nixos";
       update = "home-manager switch --flake /etc/nixos/#dap@fw13-nixos";
+      k = "kubectl";
+      kubectl = "kubecolor"; # Colorize kubectl output
+      kn = "f() { [ \"$1\" ] && kubectl config set-context --current --namespace $1 || kubectl config view --minify | grep namespace | cut -d\" \" -f6 ; } ; f";
       vim = "nvim";
+      open = "xdg-open";
     };
   };
 

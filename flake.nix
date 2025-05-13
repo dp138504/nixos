@@ -35,7 +35,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
+    zen-browser = {
+      url = "github:youwen5/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
    
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -47,6 +50,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hyprland.url = "github:hyprwm/Hyprland";
   };
 
   outputs =
@@ -61,6 +65,8 @@
       nixos-cosmic,
       sops-nix,
       stylix,
+      wezterm,
+      hyprland,
       ...
     }@inputs:
     let
@@ -90,9 +96,13 @@
               nix.settings = {
                 substituters = [ 
                   "https://cosmic.cachix.org/"
+                  "https://hyprland.cachix.org"
+                  "https://wezterm.cachix.org"
                 ];
                 trusted-public-keys = [ 
                   "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
+                  "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+                  "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
                 ];
               };
             }

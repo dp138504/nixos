@@ -49,10 +49,27 @@
 #  };
 
   # Bootloader extras.
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [
-    "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
-  ];
+  boot = {
+    loader.efi.canTouchEfiVariables = true;
+    loader.systemd-boot = {
+      windows."win11" = {
+        title = "Windows 11";
+        sortKey = "o_windows";
+        efiDeviceHandle = "HD0b";
+      };
+      extraEntries = {
+        "kali.conf" = ''
+          title Kali Linux
+          efi /efi/edk2-uefi-shell/shell.efi
+          options -nointerrupt -nomap -noversion HD1e0b:\EFI\kali\grubx64.efi
+          sort-key o_kali
+        '';
+      };
+    };
+    kernelParams = [
+      "usbcore.autosuspend=300" # Suspend USB devices after 5 minutes (default is 2 seconds)
+    ];
+  };
 
   networking.hostName = "fw13-nixos"; # Define your hostname.
 

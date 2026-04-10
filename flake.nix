@@ -3,11 +3,11 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-24.11";
+    home-manager.url = "github:nix-community/home-manager/release-25.11";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
     # NixOS Hardware quirks
@@ -17,21 +17,16 @@
     nix-colors.url = "github:misterio77/nix-colors";
 
     # Stylix
-    stylix.url = "github:danth/stylix/release-24.11";
+    stylix.url = "github:danth/stylix/release-25.11";
+    stylix.inputs.nixpkgs.follows = "nixpkgs"; 
 
     # Neovim configuration
-    kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
-    #kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
+    #kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
+    kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
 
     # Customizable SDDM theming
     sddm-surgar-candy-nix = {
       url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    # System76's Cosmic DE
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -46,11 +41,38 @@
     };
 
     wezterm = {
-      url = "github:wez/wezterm/main?dir=nix";
+    #  url = "github:wez/wezterm/5243d733532221b746f7921b3ac76c5193f49a3a?dir=nix";
+      url = "github:wezterm/wezterm?dir=nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      inputs.noctalia-qs.follows = "noctalia-qs";
+    };
+
+    noctalia-qs = {
+      url = "github:noctalia-dev/noctalia-qs";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+  };
+
+  nixConfig = {
+    trusted-users = [
+      "dap"
+      "root"
+    ];
+    extra-substituters = [
+                  "https://hyprland.cachix.org"
+                  "https://wezterm.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+                  "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+                  "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+    ];
   };
 
   outputs =
@@ -62,7 +84,6 @@
       nix-colors,
       kickstart-nix-nvim,
       sddm-surgar-candy-nix,
-      nixos-cosmic,
       sops-nix,
       stylix,
       wezterm,
@@ -79,6 +100,18 @@
       overlays = import ./overlays { inherit inputs; };
       # NixOS configuration entrypoint
       # Available through 'nixos-rebuild --flake .#your-hostname'
+#      nixConfig = {
+#              nix.settings = {
+#                substituters = [ 
+#                  "https://hyprland.cachix.org"
+#                  "https://wezterm.cachix.org"
+#                ];
+#                trusted-public-keys = [ 
+#                  "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+#                  "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
+#                ];
+#              };
+#      };
       nixosConfigurations = {
         fw13-nixos = nixpkgs.lib.nixosSystem {
           specialArgs = {
@@ -92,21 +125,6 @@
             sops-nix.nixosModules.sops
             sddm-surgar-candy-nix.nixosModules.default
             stylix.nixosModules.stylix
-            {
-              nix.settings = {
-                substituters = [ 
-                  "https://cosmic.cachix.org/"
-                  "https://hyprland.cachix.org"
-                  "https://wezterm.cachix.org"
-                ];
-                trusted-public-keys = [ 
-                  "cosmic.cachix.org-1:Dya9IyXD4xdBehWjrkPv6rtxpmMdRel02smYzA85dPE="
-                  "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
-                  "wezterm.cachix.org-1:kAbhjYUC9qvblTE+s7S+kl5XM1zVa4skO+E/1IDWdH0="
-                ];
-              };
-            }
-            nixos-cosmic.nixosModules.default
           ];
         };
       };
@@ -120,7 +138,7 @@
             inherit inputs outputs nix-colors;
           };
           modules = [
-            stylix.homeManagerModules.stylix
+            stylix.homeModules.stylix
             ./hosts/fw13-nixos/home.nix
             ./modules/home-manager
           ];

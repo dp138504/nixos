@@ -32,6 +32,7 @@
       enable = false; # Enable i3wm and supporting applications
       colemak = true; # Colemak keybindings when docked
     };
+    zoxide.enable = true; # Enable zoxide and fzf for more better cd
   };
 
   services.udiskie = {
@@ -71,7 +72,7 @@
         qwerty = true;
       };
       home.packages = with pkgs; [
-        (hiPrio (writeShellApplication {
+        (lib.hiPrio (writeShellApplication {
           name = "toggle-bindings";
           runtimeInputs = with pkgs; [
             home-manager
@@ -92,13 +93,14 @@
     packages = with pkgs; [
       ## Communications ##
       slack # Work communications
-      skypeforlinux # Skype for video chats
-      unstable.discord # Personal commuications
+      #unstable.discord # Personal commuications
+      vesktop
 
       ## Utilities ##
-      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) # Preferred font
+      #(nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) # Preferred font
+      nerd-fonts.jetbrains-mono
       nixfmt-rfc-style # Nix file linter
-      bitwarden # Password manager
+      bitwarden-desktop # Password manager
       tmux # Terminal multiplexer
       tree # Directory tree visualizer
       unzip # Unzip utility
@@ -108,17 +110,21 @@
       tailscale # Tailscale Mesh VPN
       file
       openssl
+      bottles # Wine Prefix Manager
+      google-chrome
+      rustup
      
       ## DevOps ##
       terraform
       packer
       tf-summarize
-      talosctl
+      unstable.talosctl
       kubectl
       kubectl-cnpg
       kubecolor
       kubernetes-helm
       minio-client
+      claude-code
 
       ## Graphical ##
       inkscape # Vector image editor
@@ -126,19 +132,22 @@
       imagemagick # Needed for plugins in inkscape
 
       ## 3D Printing ##
-      super-slicer-latest # 3D slicing program
+      #super-slicer-latest # 3D slicing program
       unstable.prusa-slicer
 
-      ## SDR ##
-      chirp
-      sdrangel
+      ## SDR / Ham Radio ##
+      chirp # Radio programmer
+      sdrangel # SDR interface
+      wsjtx # FT8 / weak signal modes
+      gridtracker2 # wsjtx companion app
 
       ## Desktop Applications ##
       unstable.ytmdesktop # YouTube Music desktop client
       obsidian # Notes
-      inputs.zen-browser.packages."${system}".default # Zen browser
+      inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default # Zen browser
 
     ];
+    # __NV_DISABLE_EXPLICIT_SYNC = 1; # temporary workaround for wezterm 6/8/2025
     sessionVariables = {
       EDITOR = "nvim";
     };
@@ -161,14 +170,16 @@
 
   programs.vscode = {
     enable = true;
-    extensions = [
-      pkgs.vscode-extensions.ms-vscode-remote.remote-containers
-      pkgs.vscode-extensions.ms-vscode.cpptools
-    ];
+    profiles.default = {
+      extensions = [
+        pkgs.vscode-extensions.ms-vscode-remote.remote-containers
+        pkgs.vscode-extensions.ms-vscode.cpptools
+      ];
+    };
   };
 
   programs.zsh = {
-    initExtra = "compdef kubecolor=kubectl";
+    initContent = "compdef kubecolor=kubectl";
     shellAliases = {
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos/#fw13-nixos";
       update = "home-manager switch --flake /etc/nixos/#dap@fw13-nixos";
@@ -184,12 +195,10 @@
 
   programs.git = {
     enable = true;
-    userEmail = "pitts.dylan@gmail.com";
-    userName = "Dylan A. Pitts";
-    extraConfig = {
-      init = {
-        defaultBranch = "main";
-      };
+    settings.user = {
+      email = "pitts.dylan@gmail.com";
+      name = "Dylan A. Pitts";
+      init.defaultBranch = "main";
     };
   };
 

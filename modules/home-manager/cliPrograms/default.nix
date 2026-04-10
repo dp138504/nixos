@@ -4,7 +4,8 @@
     ./autorandr.nix
     ./dunst.nix
     ./tmux.nix
-    ./zsh.nix
+    ./zsh
     ./texlive.nix
+    ./zoxide.nix
   ];
 }

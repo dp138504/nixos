@@ -49,7 +49,7 @@ in
     };
 
     # East-coast TZ
-    time.timeZone = "America/New_York";
+    #time.timeZone = "America/New_York";
 
     # Allow /etc/hosts to be writable for on-the-fly edits
     environment.etc.hosts.mode = "0644";

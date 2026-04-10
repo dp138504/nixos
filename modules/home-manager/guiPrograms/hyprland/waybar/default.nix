@@ -17,7 +17,7 @@
       brightnessctl
       pipewire
       wireplumber
-      rofi-wayland
+      rofi
       lm_sensors
       playerctl
     ];

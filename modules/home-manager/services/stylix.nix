@@ -1,4 +1,4 @@
-{ pkgs, ... }:{
+{ pkgs, lib, ... }:{
 
 stylix = {
   enable = true;
@@ -24,6 +24,7 @@ stylix = {
     base0E = "#d3869b"; # pink
     base0F = "#d65d0e"; # brown
   }; 
+
   targets.gtk.enable = true;
   targets.kde.enable = true;
   targets.waybar.enable = false;
@@ -46,12 +47,12 @@ stylix = {
     };
 
     monospace = {
-      package = (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ;
+      package = pkgs.nerd-fonts.jetbrains-mono;
       name = "JetBrainsMonoNF";
     };
 
     emoji = {
-      package = pkgs.noto-fonts-emoji;
+      package = pkgs.noto-fonts-color-emoji;
       name = "Noto Color Emoji";
     };
     

@@ -21,6 +21,7 @@ in
     ./swaync
     ./fuzzel
     ./kanshi
+    ./noctalia
 
     ./plugins.nix
     ./bindings-colemak.nix
@@ -39,6 +40,7 @@ in
     hyprlock.enable = true; # Screen Locker/Idle daemon
     hyprpaper.enable = true; # Wallpaper Daemon
     fuzzel.enable = true; # Application Launcher
+    noctalia.enable = true; # testing
 
     # Tell HyprLand to use discrete GPU first
     home.file.".config/uwsm/env-hyprland" = {
@@ -86,7 +88,7 @@ in
 
     wayland.windowManager.hyprland = {
       enable = true;
-      package = pkgs.hyprland;
+      package = pkgs.unstable.hyprland;
    #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       systemd.enable = false; # Launch with UWSM
 
@@ -102,6 +104,10 @@ in
           allow_tearing = true;
           resize_on_border = true;
         };
+
+        gesture = [
+          "3, horizontal, workspace"
+        ];
 
         decoration = {
           rounding = 5;
@@ -125,7 +131,7 @@ in
         exec-once = [
 
           # Launch startup applications on specific workspaces
-          "[workspace 5 silent] discord"
+          "[workspace 5 silent] vesktop"
           "[workspace special:scratch silent] bitwarden"
           "[workspace special:scratch silent] ytmdesktop"
           "[workspace special:scratch silent] galculator"

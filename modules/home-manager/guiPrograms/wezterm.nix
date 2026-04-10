@@ -45,6 +45,7 @@ in
       };
       extraConfig = ''
         return {      
+          check_for_updates = false,
           window_background_opacity = 0.9,
           text_background_opacity = 0.9,
           color_scheme = 'Gruvbox dark, medium (base16)',

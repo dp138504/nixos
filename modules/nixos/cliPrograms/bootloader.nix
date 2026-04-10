@@ -59,7 +59,7 @@ in
           ];
         })
       ];
-      theme = "hexagon_dots_alt";
+      theme = lib.mkDefault "hexagon_dots_alt";
     };
   };
 }

@@ -15,7 +15,7 @@ in
       syntaxHighlighting.enable = true;
       oh-my-zsh = {
         enable = true;
-        theme = "half-life";
+        theme = "half-life-mod";
         plugins = [
           "git"
           "tmux"
@@ -27,13 +27,21 @@ in
           exec tmux new-session -A -s ''${USER} >/dev/null 2>&1
         fi
       '';
-      initExtra = lib.mkIf cfg.tmux.enable ''
-        tmux-window-name() {
-          (${pkgs.additionalTmuxPlugins.tmux-window-name}/share/tmux-plugins/tmux-window-name/scripts/rename_session_windows.py &)
-        }
+      initContent = 
+      let
+        zshConfigEarlyInit = lib.mkOrder 500 ''
+          export ZSH_CUSTOM="${config.home.homeDirectory}/.oh-my-zsh/custom"
+        '';
+        zshConfig = lib.mkOrder 1000 ''
+          tmux-window-name() {
+            (${pkgs.additionalTmuxPlugins.tmux-window-name}/share/tmux-plugins/tmux-window-name/scripts/rename_session_windows.py &)
+          }
 
-        add-zsh-hook chpwd tmux-window-name
-      '';
+           add-zsh-hook chpwd tmux-window-name
+        '';
+      in lib.mkIf cfg.tmux.enable (lib.mkMerge [ zshConfigEarlyInit zshConfig ]);
+
     };
+    home.file.".oh-my-zsh/custom/themes/half-life-mod.zsh-theme".source = ./half-life-mod.zsh-theme;
   };
 }

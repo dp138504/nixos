@@ -34,6 +34,9 @@ in
     virtualisation.docker.rootless = lib.mkIf (cfg.docker) {
       enable = true;
       setSocketVariable = true;
+      daemon.settings = {
+        dns = [ "1.1.1.1" ];
+      };
     };
 
     virtualisation = {
@@ -41,10 +44,6 @@ in
         enable = true;
         qemu = {
           runAsRoot = true;
-          ovmf = {
-            packages = [ pkgs.OVMFFull.fd ];
-            enable = true;
-          };
         };
       };
       spiceUSBRedirection.enable = lib.mkIf (cfg.qemu_kvm) true;

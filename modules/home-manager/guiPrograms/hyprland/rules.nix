@@ -18,7 +18,7 @@
     ];
     windowrulev2 = [
       # Open Discord on 5
-      "workspace 5, class:discord"
+      "workspace 5, class:vesktop"
 
       # Fullscreen border color
       "bordercolor rgb(d65d0e), fullscreen:1"
@@ -32,16 +32,16 @@
       "float, title:Extension.*"
 
       "float, class:Bitwarden"
-      "move 2761 136, class:Bitwarden"
+      "move 3645 95, class:Bitwarden"
       "size 903 737, class:Bitwarden"
 
       "float, class: galculator"
-      "move 2916 958, class:galculator"
+      "move 4686 303, class:galculator"
       "size 600 323, class:galculator"
 
       "float, class:YouTube Music Desktop App"
-      "move 3748 75, class:YouTube Music Desktop App"
-      "size 1020 668, class: YouTube Music Desktop App"
+      "move 3902 879, class:YouTube Music Desktop App"
+      "size 1447 788, class: YouTube Music Desktop App"
 
       # Hide xwaylandvideobridge
       "opacity 0.0 override, class:^(xwaylandvideobridge)$"

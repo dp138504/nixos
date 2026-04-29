@@ -50,7 +50,10 @@
   #  };
 
   nix.settings.download-buffer-size = 524288000;
-  nix.settings.trusted-users = [ "dap" "root" ];
+  nix.settings.trusted-users = [
+    "dap"
+    "root"
+  ];
 
   # Bootloader extras.
   boot = {
@@ -85,12 +88,14 @@
     ];
   };
 
-
-#############################
-### BEGIN SERVICES CONFIG ###
-#############################
+  #############################
+  ### BEGIN SERVICES CONFIG ###
+  #############################
   services = {
+    usbmuxd.enable = true;
     automatic-timezoned.enable = true;
+    gnome.gnome-keyring.enable = true; # Required for keyring unlocking with UWSM
+    gnome.gcr-ssh-agent.enable = true; # Use gcr for SSH agent instead of gnupg
 
     resolved = {
       enable = true;
@@ -120,13 +125,12 @@
         retries = 10;
         trigger_buffer = 64;
       };
-      settings.preferred_ranges = 
-        [
-          "192.168.0.0/16"
-          "172.16.0.0/12"
-          "10.0.0.0/8"
-        ];
-      
+      settings.preferred_ranges = [
+        "192.168.0.0/16"
+        "172.16.0.0/12"
+        "10.0.0.0/8"
+      ];
+
       firewall = {
         inbound = [
           {
@@ -177,21 +181,6 @@
         enable = true;
         wayland.enable = true;
       };
-      #    sddm.sugarCandyNix = {
-      #      enable = false;
-      #      settings = {
-      #        Background = lib.cleanSource ../../assets/background_2256x1504.jpg;
-      #        ScreenWidth = 2256;
-      #        ScreenHeight = 1504;
-      #        FormPosition = "left";
-      #        HaveFormBackground = true;
-      #        PartialBlur = true;
-      #        DateFormat = "dddd, MMMM d, yyyy";
-      #        ForceHideCompletePassword = true; # Do not show any password characters
-      #        HeaderText = "";
-      #        Font = "JetBrainsMono Nerd Font Mono";
-      #      };
-      #    };
     };
 
     printing = {
@@ -204,6 +193,33 @@
       alsa.enable = true;
       alsa.support32Bit = true;
       pulse.enable = true;
+      wireplumber = {
+        enable = true;
+        extraConfig = {
+          "10-bluez-monitor" = {
+            "monitor.bluez.properties" = {
+              "bluez5.enable-sbc-xq" = true;
+              "bluez5.enable-msbc" = true;
+              "bluez5.enable-hw-volume" = true;
+
+              # Explicitly enable the native backend for hands-free
+              "bluez5.hfphsp-backend" = "native";
+
+              # Corrected WirePlumber role strings
+              "bluez5.roles" = [
+                "a2dp_sink"
+                "a2dp_source"
+                "bap_sink"
+                "bap_source"
+                "hsp_hs"
+                "hsp_ag"
+                "hfp_hf"
+                "hfp_ag"
+              ];
+            };
+          };
+        };
+      };
     };
 
     logind = {
@@ -226,29 +242,45 @@
     tailscale.enable = true;
     blueman.enable = true;
     openssh.enable = true;
+    dbus.packages = [ pkgs.gnome-keyring pkgs.gcr ]; # Required for keyring D-Bus integration
   };
-###########################
-### END SERVICES CONFIG ###
-###########################
+  ###########################
+  ### END SERVICES CONFIG ###
+  ###########################
 
-#############################
-### BEGIN SECURITY CONFIG ###
-#############################
+  #############################
+  ### BEGIN SECURITY CONFIG ###
+  #############################
   security = {
     rtkit.enable = true;
-    pam.services.hyprlock = { };
+    pam.services = {
+      sddm = {
+        enableGnomeKeyring = true;
+        fprintAuth = false; # Disable fingerprint for SDDM to ensure password unlocks keyring
+      };
+      login = {
+        enableGnomeKeyring = true;
+        fprintAuth = false; # SDDM substacks to login, so disable here too
+      };
+      hyprlock = {
+        enableGnomeKeyring = true; # Critical for screen unlock
+        fprintAuth = true; # Enable fingerprint for hyprlock
+      };
+      sudo.fprintAuth = true; # Enable fingerprint for sudo
+    };
+    # Note: services.gnome.gnome-keyring.enable already creates the security wrapper with cap_ipc_lock
     pki.certificateFiles = [
       ../../assets/dod_certificates.pem
       ../../assets/roots.pem
     ];
   };
-###########################
-### END SECURITY CONFIG ###
-###########################
+  ###########################
+  ### END SECURITY CONFIG ###
+  ###########################
 
-###############################
-### BEGIN NETWORKING CONFIG ###
-###############################
+  ###############################
+  ### BEGIN NETWORKING CONFIG ###
+  ###############################
   networking = {
     hostName = "fw13-nixos"; # Define your hostname.
     wireguard.enable = true;
@@ -277,21 +309,24 @@
       };
     };
   };
-#############################
-### END NETWORKING CONFIG ###
-#############################
-
+  #############################
+  ### END NETWORKING CONFIG ###
+  #############################
 
   programs = {
     zsh.enable = true;
     xfconf.enable = true;
     gnupg.agent = {
       enable = true;
-      enableSSHSupport = true;
+      enableSSHSupport = false; # Using gcr-ssh-agent instead
     };
     hyprland = {
       enable = true;
       withUWSM = true;
+    };
+    silentSDDM = {
+      enable = true;
+      theme = "default";
     };
   };
 
@@ -299,7 +334,10 @@
     module: ${pkgs.opensc}/lib/opensc-pkcs11.so
   '';
 
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  environment.sessionVariables = {
+    NIXOS_OZONE_WL = "1";
+    GNOME_KEYRING_CONTROL = "$XDG_RUNTIME_DIR/keyring";
+  };
 
   systemd.mounts = [
     {
@@ -337,6 +375,8 @@
 
   # $ nix search nixpkgs#wget
   environment.systemPackages = with pkgs; [
+    ifuse
+    libimobiledevice
     firefox # Default system browser
     vim # Text editor
     fprintd # Fingerprint reader daemon
@@ -345,6 +385,8 @@
     sops # secrets operations
     git-agecrypt
     seahorse # Gnome keyring management
+    libsecret # Secret service library
+    gcr_4 # GNOME crypto library for keyring
     kde-gruvbox
     (pkgs.writeShellScriptBin "setup-browser-cac" ''
       NSSDB="''${HOME}/.pki/nssdb"
@@ -378,6 +420,21 @@
     bluetooth = {
       enable = true;
       powerOnBoot = true;
+      settings = {
+        General = {
+          Enable = "Source,Sink,Media,Socket";
+          Name = "fw13-nixos";
+          ControllerMode = "dual";
+          FastConnectable = "true";
+          Experimental = "true";
+        };
+        Policy = {
+          AutoEnable = "true";
+        };
+        LE = {
+          EnableAdvMonInterleaveScan = "true";
+        };
+      };
     };
 
     # See the following for details: https://nixos.wiki/wiki/Nvidia

@@ -58,6 +58,10 @@ in
 #      '';
 #    };
 
+    xdg.portal.extraPortals = [
+      pkgs.xdg-desktop-portal-gtk
+    ];
+
     home = {
       packages = with pkgs; [
         hyprpolkitagent
@@ -89,7 +93,7 @@ in
     wayland.windowManager.hyprland = {
       enable = true;
       package = pkgs.unstable.hyprland;
-   #   portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      #portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       systemd.enable = false; # Launch with UWSM
 
       settings = {
@@ -129,7 +133,6 @@ in
         ];
 
         exec-once = [
-
           # Launch startup applications on specific workspaces
           "[workspace 5 silent] vesktop"
           "[workspace special:scratch silent] bitwarden"

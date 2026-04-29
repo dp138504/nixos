@@ -24,6 +24,13 @@
         "$font" = "JetBrains Mono Nerd Font";
         "$textAlpha" = "989899";
         "$accentAlpha" = "98971a";
+        auth = {
+          fingerprint = {
+            enabled = true; # parallel auth with fprintd
+            ready_message = "(Password or fingerprint)";
+            present_message = "Scanning...";
+          };
+        };
         general = {
           no_fade_in = true;
           no_fade_out = true;

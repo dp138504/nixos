@@ -14,6 +14,7 @@
 {
   imports = [
     ./hardware-configuration.nix # Include the results of the hardware scan.
+    inputs.silentSDDM.nixosModules.default
   ];
 
   # System-level profiles. Implemented as NixOS modules.

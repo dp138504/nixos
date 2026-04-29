@@ -24,9 +24,8 @@
     #kickstart-nix-nvim.url = "github:dp138504/kickstart-nix.nvim";
     kickstart-nix-nvim.url = "git+file:///home/dap/src/kickstart-nix.nvim";
 
-    # Customizable SDDM theming
-    sddm-surgar-candy-nix = {
-      url = "gitlab:Zhaith-Izaliel/sddm-sugar-candy-nix";
+    silentSDDM = {
+      url = "github:uiriansan/SilentSDDM";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -83,11 +82,11 @@
       hardware,
       nix-colors,
       kickstart-nix-nvim,
-      sddm-surgar-candy-nix,
       sops-nix,
       stylix,
       wezterm,
       hyprland,
+      silentSDDM,
       ...
     }@inputs:
     let
@@ -123,7 +122,6 @@
             hardware.nixosModules.framework-13th-gen-intel
             hardware.nixosModules.common-gpu-nvidia-nonprime
             sops-nix.nixosModules.sops
-            sddm-surgar-candy-nix.nixosModules.default
             stylix.nixosModules.stylix
           ];
         };

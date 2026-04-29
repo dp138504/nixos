@@ -80,6 +80,13 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
                 4
                 5
               ];
+              eDP-1 = [
+                1
+                2
+                3
+                4
+                5
+              ];
             };
             format-icons = {
               "1" = "󰈹";
@@ -286,7 +293,7 @@ wayland.windowManager.hyprland.settings.exec-once = [ "uwsm app -- waybar" ];
           "custom/power" = {
             format = " ";
             tooltip = false;
-            on-click = "systemctl shutdown";
+            on-click = "systemctl poweroff";
           };
           "custom/notifications" = {
             format = " ";

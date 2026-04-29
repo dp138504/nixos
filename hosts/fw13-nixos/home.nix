@@ -124,7 +124,7 @@
       kubecolor
       kubernetes-helm
       minio-client
-      claude-code
+      unstable.claude-code
 
       ## Graphical ##
       inkscape # Vector image editor
